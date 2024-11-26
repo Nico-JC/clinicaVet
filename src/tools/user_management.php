@@ -13,7 +13,7 @@ if (isset($_POST['action'])):
     if ($_POST['action'] == 'delete'):
         $userId = $_POST['userId'];
     //primero borramos las consultas que hizo que ulsuario de la tabla consulta
-        $deleteConsulta = "DELETE FROM consulta WHERE id_user = $userId";
+        $deleteConsulta = "DELETE FROM consult WHERE id_user = $userId";
         mysqli_query($conexion, $deleteConsulta);
         //despues borramos al usuario de la tabla user
         $consultaDeleteUser = "DELETE FROM user WHERE id_user = $userId";
@@ -23,7 +23,7 @@ if (isset($_POST['action'])):
     elseif ($_POST['action'] == 'asignar'):
         $userId = $_POST['userId'];
         $cambiarRol = ($_POST['rolActual'] == '1') ? '0' : '1'; //para alternar entre 1 (Admin) y 0 (Usuario)
-        $consultaUpdate = "UPDATE user SET id_permisos = $cambiarRol WHERE id_user = $userId";
+        $consultaUpdate = "UPDATE user SET accessLevel = $cambiarRol WHERE id_user = $userId";
         mysqli_query($conexion, $consultaUpdate);
     endif;
 endif;
@@ -42,11 +42,11 @@ if (!isset($_SESSION['filterCon'])) {
 //creamos una variable llamada sql con una parte de la consulta a realizar dependiendo del filtrado
 $sql = "SELECT 
         user.id_user, 
-        user.nombre, 
-        user.id_permisos, 
-        COUNT(consulta.id_consulta) AS consultas_count
-        FROM user LEFT JOIN consulta ON user.id_user = consulta.id_user 
-        GROUP BY user.id_user,user.nombre, user.id_permisos";
+        user.username, 
+        user.accessLevel, 
+        COUNT(consult.id_consulta) AS consultas_count
+        FROM user LEFT JOIN consult ON user.id_user = consult.id_user 
+        GROUP BY user.id_user,user.username, user.accessLevel";
 
 //condifionales para saber que tipo de filtrado se seleccionó con un $_GET en la misma sesión
 //uso de una funcion para no repetir la conexion a la BD
@@ -65,10 +65,10 @@ if (isset($_GET["filter"])){
 
         case "nombre" :
             if(!$_SESSION['filterNom']){
-                $sql.= " ORDER BY user.nombre DESC";
+                $sql.= " ORDER BY user.username DESC";
                 $_SESSION['filterNom'] = true;
             }else{
-                $sql.= " ORDER BY user.nombre ASC";
+                $sql.= " ORDER BY user.username ASC";
                 $_SESSION['filterNom'] = false;
             }
             $resultado = ejecutarSQL($sql,$conexion);
@@ -165,16 +165,16 @@ function ejecutarSQL($sql,$conexion){
                     <tr>
                         <!-- Datos de usuarios -->
                         <td><?= $fila['id_user'] ?></td>
-                        <td><?= $fila['nombre'] ?></td>
+                        <td><?= $fila['username'] ?></td>
                         <td><?= $fila['consultas_count'] ?></td>
-                        <td><?= ($fila['id_permisos'] == 1 ? 'Administrador' : 'Usuario') ?></td>
+                        <td><?= ($fila['accessLevel'] == 1 ? 'Administrador' : 'Usuario') ?></td>
                         <td>
                             <!-- Botón de Asignar Rol -->
                             <form action="" method="post" style="display: inline; margin-left: 5px;">
                                 <input type="hidden" name="userId" value="<?= $fila['id_user'] ?>">
-                                <input type="hidden" name="currentRole" value="<?= $fila['id_permisos'] ?>">
+                                <input type="hidden" name="currentRole" value="<?= $fila['accessLevel'] ?>">
                                 <input type="hidden" name="action" value="asignar">
-                                <?php $cambiarRol = ($fila['id_permisos'] == 1) ? 'Usuario' : 'Administrador'; ?>
+                                <?php $cambiarRol = ($fila['accessLevel'] == 1) ? 'Usuario' : 'Administrador'; ?>
                                 <button type="submit" class="btn btn-primary btn-sm">Asignar Rol</button>
                             </form>
 
