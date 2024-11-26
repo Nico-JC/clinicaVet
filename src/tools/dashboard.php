@@ -3,13 +3,12 @@ require_once("../backOffice/Data/DBcon.php");
 
 session_start();
 
-//varificamos que el nivel de acceso del usuario sea User y no admin
-$consulta = "SELECT count(*) as cantidad FROM user where id_permisos = 0";
+// varificamos que el nivel de acceso del usuario sea User y no admin
+$consulta = "SELECT count(*) as cantidad FROM user where accessLevel = 0";
 $resultado = mysqli_query($conexion, $consulta);
 
-//creamos la variable que va a contar la cant de usuarios nuevos
+// variable que va a contar la cant de usuarios nuevos
 $newUser = 0;
-
 
 if ($resultado){
     //guardamos en fila los datos traidos de la BD como un array asociativo
@@ -17,8 +16,8 @@ if ($resultado){
     $newUser = $fila['cantidad'];
 }
 
-//consulta para traer la cantidad de consultas sin una respuesta y las almacenamos en una variable para despues mostrarlo
-$consulta = "SELECT count(*) as cantidad FROM consulta where respuestaStatus = false;";
+// consulta para traer la cantidad de consultas sin una respuesta y las almacenamos en una variable para despues mostrarlo
+$consulta = "SELECT count(*) as cantidad FROM consult where respuestaStatus = false;";
 $resultado = mysqli_query($conexion, $consulta);//
 $consultasSinRespuesta = 0;
 
@@ -49,8 +48,7 @@ if ($resultado) {
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/custom-styles.css">
-    <title>Messipedia®</title>
+    <title>Dashboard</title>
 
 </head>
 
@@ -60,7 +58,7 @@ if ($resultado) {
 <nav class="navbar navbar-expand-lg bg-white sticky-top ">
     <div class="container">
         <a class="navbar-brand" href="#">
-            <img src="../../assets/images/logopng.png" alt="" style="width: 50px; height: auto;">
+            <img src="../../assets/images/vet-logo.png" alt="VetCare Logo" style="width: 150px; height: auto;">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -68,18 +66,16 @@ if ($resultado) {
         <div class="collapse navbar-collapse nav-active" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item ">
-                    <a class="nav-link active" href="../layout/index.php">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="../layout/galery.php">Carrera</a>
+                    <a class="nav-link active" href="../layout/index.php">Inicio</a>
                 </li>
                 <li class="nav-item dropdown ">
                     <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Admin Tools
                     </a>
                     <ul class="dropdown-menu " aria-labelledby="adminDropdown">
-                        <li><a class="dropdown-item active" href="./adminTools/dashboard.php">Dashboard</a></li>
-                        <li><a class="dropdown-item" href="./user-management.php">Gestión de Usuarios</a></li>
+                        <li><a class="dropdown-item active" href="dashboard.php">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="user_management.php">Gestión de Usuarios</a></li>
+                        <li><a class="dropdown-item" href="appointment_date.php">Registro de Citas</a></li>
                     </ul>
                 </li>
                 <?php if(isset($_SESSION["userId"])): ?>
@@ -91,7 +87,6 @@ if ($resultado) {
         </div>
     </div>
 </nav>
-
 <!-- Contenido del Dashboard -->
 <div class="container mt-5">
     <h1 class="mb-4">Admin Dashboard</h1>

@@ -105,15 +105,15 @@ function ejecutarSQL($sql,$conexion){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/custom-styles.css">
     <title>Gestión de Usuarios</title>
 </head>
 <body>
-<!-- Barra de navegación -->
-<nav class="navbar navbar-expand-lg bg-white sticky-top">
+
+<!-- Nav var -->
+<nav class="navbar navbar-expand-lg bg-white sticky-top ">
     <div class="container">
         <a class="navbar-brand" href="#">
-            <img src="../../assets/images/logopng.png" alt="" style="width: 50px; height: auto;">
+            <img src="../../assets/images/vet-logo.png" alt="VetCare Logo" style="width: 150px; height: auto;">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -121,32 +121,18 @@ function ejecutarSQL($sql,$conexion){
         <div class="collapse navbar-collapse nav-active" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item ">
-                    <a class="nav-link " href="../layout/index.php">Inicio</a>
+                    <a class="nav-link active" href="../layout/index.php">Inicio</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="../layout/galery.php">Galería</a>
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Admin Tools
+                    </a>
+                    <ul class="dropdown-menu " aria-labelledby="adminDropdown">
+                        <li><a class="dropdown-item" href="./dashboard.php">Dashboard</a></li>
+                        <li><a class="dropdown-item active" href="user_management.php">Gestión de Usuarios</a></li>
+                        <li><a class="dropdown-item" href="appointment_date.php">Registro de Citas</a></li>
+                    </ul>
                 </li>
-                <?php if(!isset($_SESSION["userId"])): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../layout/forms/log/register_form.php">Registrarse</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../layout/forms/log/logIn_form.php">Iniciar Sesión</a>
-                    </li>
-                <?php endif; ?>
-
-                <?php if (isset($_SESSION["userPermisos"]) && $_SESSION["userPermisos"] == 1): ?>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Admin Tools
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="adminDropdown">
-                            <li><a class="dropdown-item" href="dashboard.php">Dashboard</a></li>
-                            <li><a class="dropdown-item" href="user-management.php">Gestión de Usuarios</a></li>
-                        </ul>
-                    </li>
-                <?php endif; ?>
-
                 <?php if(isset($_SESSION["userId"])): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="../backOffice/validator/validator_logout.php">Cerrar Sesión</a>
@@ -156,7 +142,6 @@ function ejecutarSQL($sql,$conexion){
         </div>
     </div>
 </nav>
-
 <!-- Contenido principal de Gestión de Usuarios -->
 <div class="container mt-5">
     <h1 class="mb-4">Gestión de Usuarios</h1>

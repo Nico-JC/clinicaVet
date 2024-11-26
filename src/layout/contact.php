@@ -64,7 +64,7 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="adminDropdown">
                             <li><a class="dropdown-item" href="../tools/dashboard.php">Dashboard</a></li>
-                            <li><a class="dropdown-item" href="../tools/user-management.php">Gestión de Usuarios</a></li>
+                            <li><a class="dropdown-item" href="../tools/user_management.php">Gestión de Usuarios</a></li>
                         </ul>
                     </li>
                 <?php endif; ?>
