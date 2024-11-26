@@ -1,45 +1,6 @@
 <?php
-require_once("../backOffice/Data/DBcon.php");
-
-session_start();
-
-//varificamos que el nivel de acceso del usuario sea User y no admin
-$consulta = "SELECT count(*) as cantidad FROM user where id_permisos = 0";
-$resultado = mysqli_query($conexion, $consulta);
-
-//creamos la variable que va a contar la cant de usuarios nuevos
-$newUser = 0;
-
-
-if ($resultado){
-    //guardamos en fila los datos traidos de la BD como un array asociativo
-    $fila = mysqli_fetch_assoc($resultado);
-    $newUser = $fila['cantidad'];
-}
-
-//consulta para traer la cantidad de consultas sin una respuesta y las almacenamos en una variable para despues mostrarlo
-$consulta = "SELECT count(*) as cantidad FROM consulta where respuestaStatus = false;";
-$resultado = mysqli_query($conexion, $consulta);//
-$consultasSinRespuesta = 0;
-
-if ($resultado) {
-    $fila = mysqli_fetch_assoc($resultado);
-    $consultasSinRespuesta = $fila['cantidad'];
-}
-
-// Consulta para obtener el nombre del último usuario registrado y lo almacenamos en una variable para mostrarlo
-$consulta = "SELECT nombre FROM user ORDER BY id_user DESC LIMIT 1";
-$resultado = mysqli_query($conexion, $consulta);
-$ultimoUsuarioNombre = '';
-
-if ($resultado) {
-    $fila = mysqli_fetch_assoc($resultado);
-    $ultimoUsuario = $fila['nombre'];
-}
 
 ?>
-
-
 <!DOCTYPE html>
 <html>
 
@@ -60,7 +21,7 @@ if ($resultado) {
 <nav class="navbar navbar-expand-lg bg-white sticky-top ">
     <div class="container">
         <a class="navbar-brand" href="#">
-            <img src="../../assets/images/logopng.png" alt="" style="width: 50px; height: auto;">
+            <img src="../../assets/images/vet-logo.png" alt="" style="width: 50px; height: auto;">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -71,7 +32,7 @@ if ($resultado) {
                     <a class="nav-link active" href="../layout/index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../layout/galeria.php">Carrera</a>
+                    <a class="nav-link" href="../layout/galery.php">Carrera</a>
                 </li>
                 <li class="nav-item dropdown ">
                     <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

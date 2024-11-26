@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     //ejecutamos la consulta y si es exitosa redirigimos a la misma pagina con un modal para mostrar la consulta
     if ($insert->execute()) {
-        header("Location: ../contacto.php?success=1&modal=1");
+        header("Location: ../contact.php?success=1&modal=1");
     } else {
         echo "Error al insertar consulta: " . $conexion->error;
     }

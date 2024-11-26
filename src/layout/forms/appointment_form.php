@@ -12,7 +12,7 @@ session_start();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
 
     <style>
         .appointment-form {
@@ -58,7 +58,7 @@ session_start();
 
 <!-- Flecha de regreso -->
 <div class="back-arrow">
-    <a href="index.php">
+    <a href="../index.php">
         <i class="ri-arrow-left-line"></i>
         <span>Volver al inicio</span>
     </a>

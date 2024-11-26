@@ -4,7 +4,7 @@
 
 //ALMACENAR EN VARIABLES LOS PARAMETROS PARA CONECTARNOS A LA BASE DE DATOS
 $servidor = "127.0.0.1"; //esa IP equivale a localhost
-$usuario = "root"; //root equivale a la cuenta de un admin, tiene todos los provilegios
+$usuario = "root"; //root equivale a la cuenta de un admin, tiene todos los privilegios
 $password = "";//CONTRASEÑA DEL USUARIO
 $db = "veterinaria";//BASE DE DATOS
 $puerto = "3306";
@@ -13,7 +13,7 @@ $puerto = "3306";
 
 $conexion = mysqli_connect($servidor, $usuario, $password, $db, $puerto);
 
-//VERIFICAR SI LA CONECCOIN NO RESULTO EXITOSA
+//VERIFICAR SI LA CONECCION NO RESULTO EXITOSA
 
 if (!$conexion) {
     echo "Coneccion fallida<br>" . mysqli_connect_error();

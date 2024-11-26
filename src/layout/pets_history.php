@@ -56,20 +56,20 @@ session_start();
                     <a class="nav-link" href="index.php">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="galeria.php">Galería</a>
+                    <a class="nav-link" href="galery.php">Galería</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="contacto.php">Contacto</a>
+                    <a class="nav-link" href="contact.php">Contacto</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link active" href="historial.php">Historial</a>
+                    <a class="nav-link active" href="pets_history.php">Historial</a>
                 </li>
                 <?php if(!isset($_SESSION["userId"])): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="log/registro.php">Registrarse</a>
+                        <a class="nav-link" href="forms/log/register_form.php">Registrarse</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="log/inicioSesion.php">Iniciar Sesión</a>
+                        <a class="nav-link" href="forms/log/logIn_form.php">Iniciar Sesión</a>
                     </li>
                 <?php endif; ?>
 
@@ -79,8 +79,8 @@ session_start();
                             Herramientas Admin
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="adminDropdown">
-                            <li><a class="dropdown-item" href="../adminTools/dashboard.php">Dashboard</a></li>
-                            <li><a class="dropdown-item" href="../adminTools/user-management.php">Gestión de Usuarios</a></li>
+                            <li><a class="dropdown-item" href="../tools/dashboard.php">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="../tools/user-management.php">Gestión de Usuarios</a></li>
                         </ul>
                     </li>
                 <?php endif; ?>
@@ -103,7 +103,7 @@ session_start();
                 <h1 class="text-uppercase text-white fw-semibold display-1" data-aos="fade-down">Historial Médico</h1>
                 <h4 class="text-white mb-4">Consulta el historial médico completo de tus mascotas</h4>
                 <div data-aos="fade-up">
-                    <a href="cita.php" class="btn btn-success btn-lg">Reservar Cita</a>
+                    <a href="forms/appointment_form.php" class="btn btn-success btn-lg">Reservar Cita</a>
                 </div>
             </div>
         </div>
@@ -234,7 +234,7 @@ session_start();
                     <ul class="list-unstyled">
                         <li><a href="">Servicios</a></li>
                         <li><a href="">Equipo</a></li>
-                        <li><a href="contacto.php">Contacto</a></li>
+                        <li><a href="contact.php">Contacto</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-2 col-sm-6">

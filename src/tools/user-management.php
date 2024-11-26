@@ -1,5 +1,5 @@
 <?php
-require_once("../backOffice/DBcon.php");
+require_once("../backOffice/Data/DBcon.php");
 session_start();
 
 //llamamos todos los datos de la tabla user para mostrar
@@ -124,14 +124,14 @@ function ejecutarSQL($sql,$conexion){
                     <a class="nav-link " href="../layout/index.php">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../layout/galeria.php">Galería</a>
+                    <a class="nav-link" href="../layout/galery.php">Galería</a>
                 </li>
                 <?php if(!isset($_SESSION["userId"])): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="../layout/log/registro.php">Registrarse</a>
+                        <a class="nav-link" href="../layout/forms/log/register_form.php">Registrarse</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../layout/log/inicioSesion.php">Iniciar Sesión</a>
+                        <a class="nav-link" href="../layout/forms/log/logIn_form.php">Iniciar Sesión</a>
                     </li>
                 <?php endif; ?>
 
