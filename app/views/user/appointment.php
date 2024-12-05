@@ -1,5 +1,12 @@
 <?php
+Use controllers\AppointmentController;
+require_once '../../controllers/AppointmentController.php';
 session_start();
+
+$citaController = new AppointmentController();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $citaController->procesarFormulario();
+}
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +19,7 @@ session_start();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
-    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <link rel="stylesheet" href="../../../public/assets/css/style.css">
 
     <style>
         .appointment-form {
@@ -58,7 +65,7 @@ session_start();
 
 <!-- Flecha de regreso -->
 <div class="back-arrow">
-    <a href="../index.php">
+    <a href="../../../index.php">
         <i class="ri-arrow-left-line"></i>
         <span>Volver al inicio</span>
     </a>
@@ -71,42 +78,25 @@ session_start();
             <div class="col-md-8">
                 <div class="appointment-form">
                     <h2 class="text-center mb-4">Agenda tu Cita Veterinaria</h2>
-                    <form action="procesar_cita.php" method="POST">
-                        <!-- Datos del Cliente -->
-                        <div class="mb-4">
-                            <h4>Información del Cliente</h4>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="nombre_cliente" class="form-label required-field">Nombre completo</label>
-                                    <input type="text" class="form-control" id="nombre_cliente" name="nombre_cliente" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="telefono" class="form-label required-field">Teléfono</label>
-                                    <input type="tel" class="form-control" id="telefono" name="telefono" required>
-                                </div>
-                                <div class="col-md-12 mb-3">
-                                    <label for="email" class="form-label required-field">Correo electrónico</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                </div>
-                            </div>
-                        </div>
 
+                    <form action="" method="POST">
                         <!-- Datos de la Mascota -->
                         <div class="mb-4">
                             <h4>Información de la Mascota</h4>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="nombre_mascota" class="form-label required-field">Nombre de la mascota</label>
-                                    <input type="text" class="form-control" id="nombre_mascota" name="nombre_mascota" required>
+                                    <input type="text" class="form-control" id="nombre_mascota" name="nombre_mascota"
+                                           value="<?php echo htmlspecialchars(isset($_POST['nombre_mascota']) ? $_POST['nombre_mascota'] : ''); ?>" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="tipo_mascota" class="form-label required-field">Tipo de mascota</label>
                                     <select class="form-select" id="tipo_mascota" name="tipo_mascota" required>
                                         <option value="">Seleccione...</option>
-                                        <option value="perro">Perro</option>
-                                        <option value="gato">Gato</option>
-                                        <option value="ave">Ave</option>
-                                        <option value="otro">Otro</option>
+                                        <option value="perro" <?php echo (isset($_POST['tipo_mascota']) && $_POST['tipo_mascota'] == 'perro') ? 'selected' : ''; ?>>Perro</option>
+                                        <option value="gato" <?php echo (isset($_POST['tipo_mascota']) && $_POST['tipo_mascota'] == 'gato') ? 'selected' : ''; ?>>Gato</option>
+                                        <option value="ave" <?php echo (isset($_POST['tipo_mascota']) && $_POST['tipo_mascota'] == 'ave') ? 'selected' : ''; ?>>Ave</option>
+                                        <option value="otro" <?php echo (isset($_POST['tipo_mascota']) && $_POST['tipo_mascota'] == 'otro') ? 'selected' : ''; ?>>Otro</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">

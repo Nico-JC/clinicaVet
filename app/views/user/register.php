@@ -1,13 +1,16 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
-    <link rel="stylesheet" href="../../../../assets/css/style.css">
-    <link rel="stylesheet" href="../../../../assets/css/registro.css">
+    <link rel="stylesheet" href="../../../public/assets/css/style.css">
+    <link rel="stylesheet" href="../../../public/assets/css/registro.css">
 
     <title>Registro</title>
 </head>
@@ -17,7 +20,7 @@
 <nav class="navbar navbar-expand-lg bg-white sticky-top">
     <div class="container">
         <a class="navbar-brand" href="#">
-            <img src="../../../../assets/images/vet-logo.png" alt="VetCare Logo" style="width: 150px; height: auto;">
+            <img src="../../../public/assets/images/vet-logo.png" alt="VetCare Logo" style="width: 150px; height: auto;">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -25,22 +28,22 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="../../index.php">Inicio</a>
+                    <a class="nav-link" href="../../../index.php">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../../galery.php">Galería</a>
+                    <a class="nav-link" href="../../../public/layout/galery.php">Galería</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../../contact.php">Contacto</a>
+                    <a class="nav-link" href="../../../public/layout/contact.php">Contacto</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../../pets_history.php">Historial</a>
+                    <a class="nav-link" href="../../../public/layout/pets_history.php">Historial</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link active" href="register_form.php">Registrarse</a>
+                    <a class="nav-link active" href="register.php">Registrarse</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="logIn_form.php">Iniciar Sesión</a>
+                    <a class="nav-link" href="logIn.php">Iniciar Sesión</a>
                 </li>
             </ul>
         </div>
@@ -48,8 +51,7 @@
 </nav>
 
 <!--HomeP-->
-<section id="hero" class="min-vh-100 d-flex align-items-center text-center" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../../../assets/images/vet-background.jpg') center/cover;">
-
+<section id="hero" class="min-vh-100 d-flex align-items-center text-center" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../../public/assets/images/vet-background.jpg') center/cover;">
     <!--Registro-->
     <div class="form-overlay position-absolute top-50 start-50 translate-middle mt-5">
         <div class=" p-4 rounded" style="backdrop-filter: blur(10px);">
@@ -61,16 +63,16 @@
                 <button class="btn btn-border-white text-white mb-3 fw-bold"><i class="ri-apple-line lead align-midle"></i> Apple</button>
             </div>
                     <?php if (isset($_GET["error"]) && $_GET["error"] == 1): ?>
-                        <div class="btn btn-outline-danger" style="color: black">El nombre de usuario ya esta en uso</div>
+                        <div class="btn btn-outline-danger" style="color: black">El mail ya esta en uso</div>
                     <?php endif; ?>
                     <?php if (isset($_GET["error"]) && $_GET["error"] == 2): ?>
                         <div class=" btn btn-outline-danger" style="color: black">Las contraseñas no coinciden</div>
                     <?php endif; ?>
-            <form action="../../../backOffice/validator/register_validator.php" method="post">
+            <form action="/tp-clinica-vet/app/controllers/validator/validator_register.php" method="post">
                 <div class="container">
                     <div class="form-group col-md-12 mb-3">
-                        <label class="fw-bold text-white">Nombre de Usuario <span class="text-danger">*</span></label>
-                        <input id="userName" name="userName" type="text" class="form-control" placeholder="Tu nombre de usuario" autocomplete="off" required>
+                        <label class="fw-bold text-white">Email <span class="text-danger">*</span></label>
+                        <input id="email" name="email" type="email" class="form-control" placeholder="Tu mail" autocomplete="off" required>
                     </div>
                     <div class="form-group col-md-12 mb-3">
                         <label class="fw-bold text-white">Contraseña <span class="text-danger">*</span></label>
@@ -93,7 +95,7 @@
         <div class="container">
             <div class="row gy-4">
                 <div class="col-lg-4">
-                    <img src="../../../../assets/images/vet-logo.png" alt="" class="mb-4" style="height: 80px;">
+                    <img src="../../../public/assets/images/vet-logo.png" alt="" class="mb-4" style="height: 80px;">
                     <p class="text-white">Tu clínica veterinaria de confianza</p>
                 </div>
                 <div class="col-lg-2 col-sm-6">
@@ -101,7 +103,7 @@
                     <ul class="list-unstyled">
                         <li><a href="">Servicios</a></li>
                         <li><a href="">Equipo</a></li>
-                        <li><a href="../../contact.php">Contacto</a></li>
+                        <li><a href="../../../public/layout/contact.php">Contacto</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-2 col-sm-6">
@@ -136,6 +138,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script src="../../../../assets/js/fade.js"></script>
+<script src="../../../public/assets/js/fade.js"></script>
 </body>
 </html>
