@@ -1,6 +1,6 @@
 <?php
 Use controllers\AppointmentController;
-require_once '../../controllers/AppointmentController.php';
+require_once __DIR__ . '/../../controllers/AppointmentController.php';
 session_start();
 
 $citaController = new AppointmentController();

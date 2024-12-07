@@ -2,6 +2,7 @@
 
 namespace controllers;
 
+use http\Exception\BadConversionException;
 use models\User;
 
 require_once __DIR__ . '/../models/User.php';
@@ -37,7 +38,50 @@ class UserController
         }
         header("Location: /tp-clinica-vet/app/views/user/logIn.php?error=1");
         exit();
-
     }
+
+    public function getAllUsers($filter = null, $button = null){
+        if ($button !== null) {
+            switch ($button) {
+                case 'delete':
+                    if (isset($_POST['userId'])) {
+                        return $this->user->butonAction('delete', $_POST['userId']);
+                    }
+                    break;
+                case 'asignar':
+                    if (isset($_POST['emailID']) && isset($_POST['currentRole'])) {
+                        return $this->user->butonAction('asignar', $_POST['emailID'], $_POST['currentRole']);
+                    }
+                    break;
+            }
+        }
+        if ($filter !== null) {
+            return $this->user->filter();
+        }
+        return $this->user->getAllUsers();
+    }
+
+    public function getAllCitas($filter = null, $button = null){
+        if ($button !== null) {
+            switch ($button) {
+                case 'delete':
+                    if (isset($_POST['userId'])) {
+                        return $this->user->petsFilter('delete', $_POST['userId']);
+                    }
+                    break;
+                case 'asignar':
+                    if (isset($_POST['emailID']) && isset($_POST['currentRole'])) {
+                        return $this->user->butonAction('asignar', $_POST['emailID'], $_POST['currentRole']);
+                    }
+                    break;
+            }
+        }
+        if ($filter !== null) {
+            return $this->user->filter();
+        }
+        return $this->user->getAllCitas();
+    }
+
+
 
 }

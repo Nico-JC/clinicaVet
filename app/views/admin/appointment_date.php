@@ -1,39 +1,13 @@
 <?php
-require_once("../../config/Data/DBcon.php");
-
+use controllers\UserController;
+require_once __DIR__ . '/../../controllers/UserController.php';
 session_start();
 
-if ($conexion->connect_error) {
-    die("Error de conexión: " . $conexion->connect_error);
-}
-
-// varificamos que el nivel de acceso del usuario sea User y no admin
-$consulta = "SELECT count(*) as cantidad FROM user where accessLevel = 0";
-$resultado = mysqli_query($conexion, $consulta);
-
-// Obtener el número de página actual
-$current_page = isset($_GET['page']) ? $_GET['page'] : 1;
-$records_per_page = 10;
-
-// Calcular el offset
-$offset = ($current_page - 1) * $records_per_page;
-
-// Consulta para obtener los registros de pacientes
-$sql = "SELECT * FROM pacientes LIMIT $offset, $records_per_page";
-$result = $conexion->query($sql);
-
-// Obtener el número total de registros
-if ($resultado) {
-    $total_records = $conexion->query("SELECT COUNT(*) AS total FROM user")->fetch_assoc()['total'];
-    $total_pages = ceil($total_records / $records_per_page);
-}
-
+$userController = new UserController();
+$filter = isset($_GET['filter']) ? $_GET['filter'] : null;
+$button = isset($_POST['action']) ? $_POST['action'] : null;
+$mascotas = $userController->getAllCitas($filter, $button);
 ?>
-
-
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,7 +17,7 @@ if ($resultado) {
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../../public/assets/css/style.css">
-    <title>Registro de Pacientes</title>
+    <title>Registro de Mascotas</title>
 </head>
 <body>
 
@@ -71,11 +45,6 @@ if ($resultado) {
                 <li class="nav-item">
                     <a class="nav-link" href="../../../public/layout/pets_history.php">Historial</a>
                 </li>
-
-                <!------------------------------------------------------------------------------>
-
-                <!------------------------------------------------------------------------------>
-
                 <?php if(!isset($_SESSION["userId"])): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="../user/register.php">Registrarse</a>
@@ -84,7 +53,6 @@ if ($resultado) {
                         <a class="nav-link" href="../user/logIn.php">Iniciar Sesión</a>
                     </li>
                 <?php endif; ?>
-
                 <?php if (isset($_SESSION["accessLevel"]) && $_SESSION["accessLevel"] == 1): ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Tools
@@ -96,7 +64,6 @@ if ($resultado) {
                         </ul>
                     </li>
                 <?php endif; ?>
-
                 <?php if(isset($_SESSION["userId"])): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="../../controllers/validator/validator_logout.php">Cerrar Sesión</a>
@@ -107,62 +74,56 @@ if ($resultado) {
     </div>
 </nav>
 
+<div class="container mt-5">
+    <h1 class="mb-4">Registro de Mascotas</h1>
 
-<div class="container my-5">
-    <h1 class="mb-4">Registro de Pacientes</h1>
+    <a href="/tp-clinica-vet/app/views/user/appointment.php" class="btn btn-success mb-3">
+        Agregar Nueva Mascota
+    </a>
 
-    <table class="table table-striped table-hover">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Especie</th>
-            <th>Raza</th>
-            <th>Edad</th>
-            <th>Dueño</th>
-            <th>Fecha de Atención</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
-        if ($result != false && $result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $row["id"] . "</td>";
-                echo "<td>" . $row["nombre"] . "</td>";
-                echo "<td>" . $row["especie"] . "</td>";
-                echo "<td>" . $row["raza"] . "</td>";
-                echo "<td>" . $row["edad"] . "</td>";
-                echo "<td>" . $row["dueno"] . "</td>";
-                echo "<td>" . $row["fecha_atencion"] . "</td>";
-                echo "</tr>";
-            }
-        } else {
-            echo "<tr><td colspan='7'>No se encontraron registros.</td></tr>";
-        }
-        ?>
-        </tbody>
-    </table>
-
-    <!-- Paginación -->
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            <?php
-            if ($current_page > 1) {
-                echo "<li class='page-item'><a class='page-link' href='?page=" . ($current_page - 1) . "'>Anterior</a></li>";
-            }
-
-            for ($i = 1; $i <= $total_pages; $i++) {
-                $active = ($i == $current_page) ? "active" : "";
-                echo "<li class='page-item " . $active . "'><a class='page-link' href='?page=" . $i . "'>$i</a></li>";
-            }
-
-            if ($current_page < $total_pages) {
-                echo "<li class='page-item'><a class='page-link' href='?page=" . ($current_page + 1) . "'>Siguiente</a></li>";
-            }
-            ?>
-        </ul>
-    </nav>
+    <div class="table-responsive">
+        <table class="table table-striped ">
+            <thead>
+            <tr> <!--window location, para recargar la pagina en el onclick para el filtrado (https://www.w3schools.com/js/js_window_location.asp)-->
+                <th><div style="cursor: pointer" onclick="window.location.href='user_management.php?filter=id'">ID</div>
+                <th><div style="cursor: pointer" onclick="window.location.href='user_management.php?filter=email'">Nombre</div></th>
+                <th><div style="cursor: pointer" onclick="window.location.href='user_management.php?filter=consulta'">Tipo</div></th>
+                <th>Raza</th>
+                <th>Peso</th>
+                <th>Edad</th>
+                <th>Fecha Y Hora del turno</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if (!empty($mascotas)): ?>
+                <?php foreach ($mascotas as $fila): ?>
+                    <tr>
+                        <!-- Datos de usuarios -->
+                        <td><?= isset($fila['id_cita']) ? htmlspecialchars($fila['id_cita']) : 'N/A'; ?></td>
+                        <td><?= isset($fila['nombre_mascota']) ? htmlspecialchars($fila['nombre_mascota']) : 'N/A'; ?></td>
+                        <td><?= isset($fila['tipo_mascota']) ? htmlspecialchars($fila['tipo_mascota']) : 'N/A'; ?></td>
+                        <td><?= isset($fila['raza']) ? htmlspecialchars($fila['raza']) : 'N/A'; ?></td>
+                        <td><?= isset($fila['peso']) ? htmlspecialchars($fila['peso']) : 'N/A'; ?></td>
+                        <td><?= isset($fila['edad']) ? htmlspecialchars($fila['edad']) : 'N/A'; ?></td>
+                        <td><?= isset($fila['fecha']) ? htmlspecialchars($fila['fecha']) : 'N/A' ;echo " ",isset($fila['hora']) ? htmlspecialchars($fila['hora']) : 'N/A'; ?></td>
+                        <td>
+                            <!-- Botón de Eliminar -->
+                            <form action="" method="post" style="display: inline; margin-left: 5px;">
+                                <input type="hidden" name="userId" value="<?= htmlspecialchars($fila['id_user']) ?>">
+                                <input type="hidden" name="action" value="delete">
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="8">No se encontraron registros.</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

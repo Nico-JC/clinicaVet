@@ -1,7 +1,6 @@
-
 <?php
-
 namespace models;
+
 class Appointment {
     private $conn;
     public $id;
