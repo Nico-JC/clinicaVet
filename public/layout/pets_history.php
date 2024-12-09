@@ -1,5 +1,10 @@
 <?php
+use controllers\UserController;
+require_once __DIR__ . '/../../app/controllers/UserController.php';
 session_start();
+
+$userController = new UserController();
+$petsHistoryInfo = $userController->showPetsHistory($_SESSION["userId"]);
 ?>
 
 
@@ -117,95 +122,93 @@ session_start();
 
         <!-- Lista de Mascotas -->
         <div class="row g-4 mb-5">
-            <!-- Mascota 1 -->
-            <div class="col-md-8 col-lg-4">
-                <div class="card pet-card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Max</h5>
-                        <p class="card-text text-muted">Labrador Retriever • 3 años</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#historialModal">Ver Historial</button>
+            <?php if ($petsHistoryInfo['tienesMascotas']): ?>
+                <?php foreach ($petsHistoryInfo['mascotas'] as $mascota): ?>
+                    <div class="col-md-8 col-lg-4">
+                        <div class="card pet-card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo htmlspecialchars($mascota['nombre_mascota']); ?></h5>
+                                <p class="card-text text-muted">
+                                    <?php echo htmlspecialchars($mascota['tipo_mascota']); ?> •
+                                    <?php echo htmlspecialchars($mascota['raza']); ?> •
+                                    <?php echo htmlspecialchars($mascota['edad']); ?> años
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button class="btn btn-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#historialModal-<?php echo htmlspecialchars($mascota['nombre_mascota']); ?>">
+                                        Ver Historial
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Mascota 2 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card pet-card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Luna</h5>
-                        <p class="card-text text-muted">Gato Siamés • 2 años</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#historialModal">Ver Historial</button>
-                        </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-12">
+                    <div class="alert alert-info" role="alert">
+                        Aún no has registrado ninguna mascota.
+                        <a href="../../app/views/user/appointment.php" class="alert-link">Programa tu primera cita</a>
                     </div>
                 </div>
-            </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>
 
-<!-- Modal de Historial -->
-<div class="modal fade" id="historialModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Historial Médico - Max</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="timeline">
-                    <!-- Consulta 1 -->
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <div class="d-flex justify-content-between">
-                                <h6 class="mb-0">Consulta de Rutina</h6>
-                                <small class="text-muted">15/11/2023</small>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h6>Diagnóstico:</h6>
-                            <p>Revisión general. Estado de salud óptimo.</p>
-                            <h6>Tratamiento:</h6>
-                            <p>Vacuna contra la rabia aplicada.</p>
-                            <h6>Veterinario:</h6>
-                            <p>Dr. García</p>
-                        </div>
-                    </div>
+<!-- Modal de Historial Médico -->
+<?php foreach ($petsHistoryInfo['mascotas'] as $mascota): ?>
+    <div class="modal fade" id="historialModal-<?php echo htmlspecialchars($mascota['nombre_mascota']); ?>" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Historial Médico - <?php echo htmlspecialchars($mascota['nombre_mascota']); ?></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="timeline">
+                        <?php
+                        $historialMedico = $userController->getPetMedicalHistory($_SESSION["userId"], $mascota['nombre_mascota']);
 
-                    <!-- Consulta 2 -->
-                    <div class="card mb-3">
-                        <div class="card-header bg-light">
-                            <div class="d-flex justify-content-between">
-                                <h6 class="mb-0">Emergencia</h6>
-                                <small class="text-muted">03/09/2023</small>
+                        if (!empty($historialMedico)):
+                            foreach ($historialMedico as $consulta):
+                                ?>
+                                <div class="card mb-3">
+                                    <div class="card-header bg-light">
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="mb-0"><?php echo htmlspecialchars($consulta['diagnostico']); ?></h6>
+                                            <small class="text-muted"><?php echo htmlspecialchars($consulta['fecha']); ?></small>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Diagnóstico:</h6>
+                                        <p><?php echo htmlspecialchars($consulta['diagnostico']); ?></p>
+                                        <h6>Tratamiento:</h6>
+                                        <p><?php echo htmlspecialchars($consulta['tratamiento']); ?></p>
+                                        <h6>Veterinario:</h6>
+                                        <p><?php echo htmlspecialchars($consulta['veterinario']); ?></p>
+                                    </div>
+                                </div>
+                            <?php
+                            endforeach;
+                        else:
+                            ?>
+                            <div class="alert alert-info" role="alert">
+                                No hay registros médicos para esta mascota.
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <h6>Diagnóstico:</h6>
-                            <p>Problemas digestivos por ingesta de alimento inadecuado.</p>
-                            <h6>Tratamiento:</h6>
-                            <ul>
-                                <li>Medicamento antiemético</li>
-                                <li>Dieta especial por 3 días</li>
-                            </ul>
-                            <h6>Veterinario:</h6>
-                            <p>Dra. Martínez</p>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Descargar Historial</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Descargar Historial</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+<?php endforeach; ?>
 
 <!--Footer-->
-
 <footer class="bg-dark">
     <div class="footer-top">
         <div class="container">

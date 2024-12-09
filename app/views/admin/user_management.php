@@ -38,13 +38,14 @@ $users = $userController->getAllUsers($filter, $button);
                 <li class="nav-item">
                     <a class="nav-link" href="../../../public/layout/galery.php">Galería</a>
                 </li>
+                <?php if (isset($_SESSION["accessLevel"]) && $_SESSION["accessLevel"] == 2): ?>
                 <li class="nav-item">
                     <a class="nav-link" href="../../../public/layout/contact.php">Contacto</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="../../../public/layout/pets_history.php">Historial</a>
                 </li>
-
+                <?php endif; ?>
                 <?php if(!isset($_SESSION["userId"])): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="../user/register.php">Registrarse</a>

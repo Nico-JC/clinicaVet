@@ -81,4 +81,17 @@ class UserController
         }
         return $this->user->getAllCitas();
     }
+
+    public function showPetsHistory($userId) {
+        $mascotas = $this->user->getPetsByUserId($userId);
+
+        return [
+            'mascotas' => $mascotas,
+            'tienesMascotas' => !empty($mascotas)
+        ];
+    }
+
+    public function getPetMedicalHistory($userId, $nombreMascota) {
+        return $this->user->getMedicalHistoryByPetName($userId, $nombreMascota);
+    }
 }

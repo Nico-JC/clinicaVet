@@ -158,7 +158,6 @@ class User
         return $this->getAllUsers();
     }
 
-
     public function getAllCitas(){
         $query = "SELECT * FROM cita";
         $stmt = $this->conn->prepare($query);
@@ -235,6 +234,30 @@ class User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Método para obtener las mascotas de un usuario
+    public function getPetsByUserId($userId) {
+        $query = "SELECT DISTINCT nombre_mascota, tipo_mascota, raza, edad 
+                  FROM cita 
+                  WHERE id_user = :userId 
+                  GROUP BY nombre_mascota";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
 
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getMedicalHistoryByPetName($userId, $nombreMascota){
+        $query = "SELECT fecha, hora, diagnostico, tratamiento, veterinario 
+                  FROM cita 
+                  WHERE id_user = :userId AND nombre_mascota = :nombreMascota 
+                  ORDER BY fecha DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->bindParam(':nombreMascota', $nombreMascota, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 }
