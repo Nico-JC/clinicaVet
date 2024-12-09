@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="col-md-6 mb-3">
                                     <label for="tipo_mascota" class="form-label required-field">Tipo de mascota</label>
                                     <select class="form-select" id="tipo_mascota" name="tipo_mascota" required>
-                                        <option value="">Seleccione...</option>
+                                        <option value="" disabled selected>Seleccione...</option>
                                         <option value="perro" <?php echo (isset($_POST['tipo_mascota']) && $_POST['tipo_mascota'] == 'perro') ? 'selected' : ''; ?>>Perro</option>
                                         <option value="gato" <?php echo (isset($_POST['tipo_mascota']) && $_POST['tipo_mascota'] == 'gato') ? 'selected' : ''; ?>>Gato</option>
                                         <option value="ave" <?php echo (isset($_POST['tipo_mascota']) && $_POST['tipo_mascota'] == 'ave') ? 'selected' : ''; ?>>Ave</option>
