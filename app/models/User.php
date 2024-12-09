@@ -234,7 +234,6 @@ class User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Método para obtener las mascotas de un usuario
     public function getPetsByUserId($userId) {
         $query = "SELECT DISTINCT nombre_mascota, tipo_mascota, raza, edad 
                   FROM cita 
@@ -248,7 +247,7 @@ class User
     }
 
     public function getMedicalHistoryByPetName($userId, $nombreMascota){
-        $query = "SELECT fecha, hora, diagnostico, tratamiento, veterinario 
+        $query = "SELECT fecha, hora, diagnostico, tratamiento, veterinario
                   FROM cita 
                   WHERE id_user = :userId AND nombre_mascota = :nombreMascota 
                   ORDER BY fecha DESC";

@@ -82,6 +82,7 @@ class UserController
         return $this->user->getAllCitas();
     }
 
+
     public function showPetsHistory($userId) {
         $mascotas = $this->user->getPetsByUserId($userId);
 

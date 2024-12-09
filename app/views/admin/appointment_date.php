@@ -7,6 +7,14 @@ $userController = new UserController();
 $filter = isset($_GET['filter']) ? $_GET['filter'] : null;
 $button = isset($_POST['action']) ? $_POST['action'] : null;
 $mascotas = $userController->getAllCitas($filter, $button);
+$paginacion = $userController->getAllCitas();
+$artXpag = 10;
+$totalRegistros = count($paginacion);
+$paginas = ceil($totalRegistros / $artXpag);
+
+if (!$_GET){
+    header('Location: /tp-clinica-vet/app/views/admin/appointment_date.php?pagina=1');
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -78,11 +86,8 @@ $mascotas = $userController->getAllCitas($filter, $button);
 
 <div class="container mt-5">
     <h1 class="mb-4">Registro de Mascotas</h1>
-
-    <a href="/tp-clinica-vet/app/views/user/appointment.php" class="btn btn-success mb-3">
-        Agregar Nueva Mascota
-    </a>
-
+    <a href="/tp-clinica-vet/app/views/user/appointment.php" class="btn btn-success mb-3">Agregar Nueva Mascota</a>
+    <?php foreach ($paginacion as $registro):?>
     <div class="table-responsive">
         <table class="table table-striped ">
             <thead>
@@ -100,7 +105,7 @@ $mascotas = $userController->getAllCitas($filter, $button);
             <?php if (!empty($mascotas)): ?>
                 <?php foreach ($mascotas as $fila): ?>
                     <tr>
-                        <!-- Datos de usuarios -->
+                        <!-- Datos de mascotas -->
                         <td><?= isset($fila['id_cita']) ? htmlspecialchars($fila['id_cita']) : 'N/A'; ?></td>
                         <td><?= isset($fila['nombre_mascota']) ? htmlspecialchars($fila['nombre_mascota']) : 'N/A'; ?></td>
                         <td><?= isset($fila['tipo_mascota']) ? htmlspecialchars($fila['tipo_mascota']) : 'N/A'; ?></td>
@@ -126,6 +131,16 @@ $mascotas = $userController->getAllCitas($filter, $button);
             </tbody>
         </table>
     </div>
+    <?php endforeach; ?>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item <?php echo $_GET['pagina'] <= 1 ? 'disabled' : '' ?>"><a class="page-link" href="appointment_date.php?pagina=<?php echo $_GET['pagina']-1 ?>"> < </a></li>
+                <?php for ($i = 0; $i < $paginas; $i++): ?>
+                <li class="page-item"><a class="page-link <?php echo $_GET['pagina'] == $i+1 ? 'active' : ''?>" href="appointment_date.php?pagina=<?php echo $i + 1; ?>"><?php echo $i + 1; ?></a></li>
+                <?php endfor ?>
+                <li class="page-item <?php echo $_GET['pagina'] >= $paginas ? 'disabled' : '' ?>"><a class="page-link" href="appointment_date.php?pagina=<?php echo $_GET['pagina']+1?> "> > </a></li>
+            </ul>
+        </nav>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
