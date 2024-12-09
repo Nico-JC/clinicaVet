@@ -28,9 +28,10 @@ class AppointmentController
             $this->cita->fecha = isset($_POST['fecha']) ? $_POST['fecha'] : '';
             $this->cita->hora = isset($_POST['hora']) ? $_POST['hora'] : '';
             $this->cita->sintomas = isset($_POST['sintomas']) ? $_POST['sintomas'] : '';
+            $this->cita->id_user = isset($_POST['id_user']) ? $_POST['id_user'] : '';
 
             if ($this->cita->crear()) {
-                header("Location: ../../index.php?");
+                header("Location: /tp-clinica-vet/index.php?");
                 exit();
             } else {
                 echo "Hubo un error al guardar la cita";

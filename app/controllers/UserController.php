@@ -81,7 +81,4 @@ class UserController
         }
         return $this->user->getAllCitas();
     }
-
-
-
 }

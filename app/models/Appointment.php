@@ -13,6 +13,7 @@ class Appointment {
     public $fecha;
     public $hora;
     public $sintomas;
+    public $id_user;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -25,8 +26,8 @@ class Appointment {
         $this->servicio = htmlspecialchars(strip_tags($this->servicio));
         $this->sintomas = htmlspecialchars(strip_tags($this->sintomas));
 
-        $query = "INSERT INTO cita(nombre_mascota, tipo_mascota, raza, peso, edad, servicio, fecha, hora, sintomas) 
-                  VALUES (:nombre_mascota, :tipo_mascota, :raza, :peso, :edad, :servicio, :fecha, :hora, :sintomas)";
+        $query = "INSERT INTO cita(nombre_mascota, tipo_mascota, raza, peso, edad, servicio, fecha, hora, sintomas, id_user) 
+                  VALUES (:nombre_mascota, :tipo_mascota, :raza, :peso, :edad, :servicio, :fecha, :hora, :sintomas, :id_user)";
 
         $stmt = $this->conn->prepare($query);
 
@@ -39,8 +40,7 @@ class Appointment {
         $stmt->bindParam(":fecha", $this->fecha);
         $stmt->bindParam(":hora", $this->hora);
         $stmt->bindParam(":sintomas", $this->sintomas);
-
-
+        $stmt->bindParam(":id_user", $this->id_user);
         try {
             return $stmt->execute();
         } catch(PDOException $exception) {

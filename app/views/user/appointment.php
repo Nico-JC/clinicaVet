@@ -79,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h2 class="text-center mb-4">Agenda tu Cita Veterinaria</h2>
 
                     <form action="" method="POST">
+                        <input type="hidden" name="id_user" value="<?= $_SESSION['userId'] ?>">
                         <!-- Datos de la Mascota -->
                         <div class="mb-4">
                             <h4>Información de la Mascota</h4>
