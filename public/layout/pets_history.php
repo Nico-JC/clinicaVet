@@ -93,7 +93,9 @@ session_start();
                 <h1 class="text-uppercase text-white fw-semibold display-1" data-aos="fade-down">Historial Médico</h1>
                 <h4 class="text-white mb-4">Consulta el historial médico completo de tus mascotas</h4>
                 <div data-aos="fade-up">
+                    <?php if(isset($_SESSION["userId"])): ?>
                     <a href="../../app/views/user/appointment.php" class="btn btn-success btn-lg">Reservar Cita</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

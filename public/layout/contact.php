@@ -114,7 +114,9 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
             <div class="col-12">
                 <h1 class="text-uppercase text-white fw-semibold display-1" data-aos="fade-down">Contacto</h1>
                 <div data-aos="fade-up">
+                    <?php if(isset($_SESSION["userId"])): ?>
                     <a href="../../app/views/user/appointment.php" class="btn btn-success btn-lg">Reservar Cita</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

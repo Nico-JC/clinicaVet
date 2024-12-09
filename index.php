@@ -73,7 +73,7 @@ session_start();
     </div>
 </nav>
 
-<!--Hero Section-->
+<!--HomeP-->
 <section id="hero" class="min-vh-100 d-flex align-items-center text-center" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('public/assets/images/vet-background.jpg') center/cover;">
     <div class="container">
         <div class="row">
@@ -82,7 +82,9 @@ session_start();
                 <div data-aos="fade-up">
                     <h5 class="text-white mt-3 mb-4">Cuidamos de tus mascotas como si fueran nuestras.
                         Servicio veterinario profesional las 24 horas del día.</h5>
+                    <?php if(isset($_SESSION["userId"])): ?>
                     <a href="app/views/user/appointment.php" class="btn btn-success btn-lg">Reservar Cita</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
