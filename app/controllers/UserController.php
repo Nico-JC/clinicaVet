@@ -4,18 +4,23 @@ namespace controllers;
 
 use http\Exception\BadConversionException;
 use models\User;
+use models\Pet;
 
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../models/Pet.php';
 require_once  __DIR__ . '/../../config/Data/DBConfig.php';
 class UserController
 {
     private $user;
+    private $pet;
     private $conexion;
 
     public function __construct(){
         $this->conexion = (new \Database)->getConnection();
         $this->user = new User($this->conexion);
+        $this->pet = new Pet($this->conexion);
     }
+
 
     public function register($email, $password, $confirm_password) {
         if ($this->user->mailExists($email)) {
@@ -66,7 +71,7 @@ class UserController
             switch ($button) {
                 case 'delete':
                     if (isset($_POST['userId'])) {
-                        return $this->user->petsFilter('delete', $_POST['userId']);
+                        return $this->user->butonAction('delete', $_POST['emailID'], $_POST['currentRole']);
                     }
                     break;
                 case 'asignar':
@@ -77,13 +82,13 @@ class UserController
             }
         }
         if ($filter !== null) {
-            return $this->user->filter();
+            return $this->pet->petsFilter();
         }
-        return $this->user->getAllCitas();
+        return $this->pet->getAllCitas();
     }
 
     public function getPaginatedCitas($offset, $limit) {
-        return $this->user->getPaginatedCitas($offset, $limit);
+        return $this->pet->getPaginatedCitas($offset, $limit);
     }
 
 

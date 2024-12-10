@@ -6,7 +6,7 @@ session_start();
 $userController = new UserController();
 $filter = isset($_GET['filter']) ? $_GET['filter'] : null;
 $button = isset($_POST['action']) ? $_POST['action'] : null;
-//$mascotas = $userController->getAllCitas($filter, $button);
+$mascotas = $userController->getAllCitas($filter, $button);
 
 
 // Paginación
@@ -93,12 +93,12 @@ $mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, 
             <thead>
             <tr> <!--window location, para recargar la pagina en el onclick para el filtrado (https://www.w3schools.com/js/js_window_location.asp)-->
                 <th><div style="cursor: pointer" onclick="window.location.href='appointment_date.php?filter=id'">ID</div>
-                <th><div style="cursor: pointer" onclick="window.location.href='appointment_date.php?filter=email'">Nombre</div></th>
-                <th><div style="cursor: pointer" onclick="window.location.href='appointment_date.php?filter=consulta'">Tipo</div></th>
+                <th><div style="cursor: pointer" onclick="window.location.href='appointment_date.php?filter=nombre'">Nombre</div></th>
+                <th>Tipo</th>
                 <th>Raza</th>
                 <th>Peso</th>
                 <th>Edad</th>
-                <th>Fecha Y Hora del turno</th>
+                <th><div style="cursor: pointer" onclick="window.location.href='appointment_date.php?filter=fecha'">Fecha Y Hora del turno</div></th>
             </tr>
             </thead>
             <tbody>
