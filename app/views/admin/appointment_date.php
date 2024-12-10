@@ -6,15 +6,16 @@ session_start();
 $userController = new UserController();
 $filter = isset($_GET['filter']) ? $_GET['filter'] : null;
 $button = isset($_POST['action']) ? $_POST['action'] : null;
-$mascotas = $userController->getAllCitas($filter, $button);
-$paginacion = $userController->getAllCitas();
-$artXpag = 10;
-$totalRegistros = count($paginacion);
-$paginas = ceil($totalRegistros / $artXpag);
+//$mascotas = $userController->getAllCitas($filter, $button);
 
-if (!$_GET){
-    header('Location: /tp-clinica-vet/app/views/admin/appointment_date.php?pagina=1');
-}
+
+// Paginación
+$itemsPerPage = 10;
+$currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$totalRecords = count($userController->getAllCitas($filter, $button));
+$totalPages = ceil($totalRecords / $itemsPerPage);
+$offset = ($currentPage - 1) * $itemsPerPage;
+$mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, $button);
 ?>
 <!DOCTYPE html>
 <html>
@@ -87,14 +88,13 @@ if (!$_GET){
 <div class="container mt-5">
     <h1 class="mb-4">Registro de Mascotas</h1>
     <a href="/tp-clinica-vet/app/views/user/appointment.php" class="btn btn-success mb-3">Agregar Nueva Mascota</a>
-    <?php foreach ($paginacion as $registro):?>
     <div class="table-responsive">
         <table class="table table-striped ">
             <thead>
             <tr> <!--window location, para recargar la pagina en el onclick para el filtrado (https://www.w3schools.com/js/js_window_location.asp)-->
-                <th><div style="cursor: pointer" onclick="window.location.href='user_management.php?filter=id'">ID</div>
-                <th><div style="cursor: pointer" onclick="window.location.href='user_management.php?filter=email'">Nombre</div></th>
-                <th><div style="cursor: pointer" onclick="window.location.href='user_management.php?filter=consulta'">Tipo</div></th>
+                <th><div style="cursor: pointer" onclick="window.location.href='appointment_date.php?filter=id'">ID</div>
+                <th><div style="cursor: pointer" onclick="window.location.href='appointment_date.php?filter=email'">Nombre</div></th>
+                <th><div style="cursor: pointer" onclick="window.location.href='appointment_date.php?filter=consulta'">Tipo</div></th>
                 <th>Raza</th>
                 <th>Peso</th>
                 <th>Edad</th>
@@ -105,17 +105,15 @@ if (!$_GET){
             <?php if (!empty($mascotas)): ?>
                 <?php foreach ($mascotas as $fila): ?>
                     <tr>
-                        <!-- Datos de mascotas -->
-                        <td><?= isset($fila['id_cita']) ? htmlspecialchars($fila['id_cita']) : 'N/A'; ?></td>
-                        <td><?= isset($fila['nombre_mascota']) ? htmlspecialchars($fila['nombre_mascota']) : 'N/A'; ?></td>
-                        <td><?= isset($fila['tipo_mascota']) ? htmlspecialchars($fila['tipo_mascota']) : 'N/A'; ?></td>
-                        <td><?= isset($fila['raza']) ? htmlspecialchars($fila['raza']) : 'N/A'; ?></td>
-                        <td><?= isset($fila['peso']) ? htmlspecialchars($fila['peso']) : 'N/A'; ?></td>
-                        <td><?= isset($fila['edad']) ? htmlspecialchars($fila['edad']) : 'N/A'; ?></td>
-                        <td><?= isset($fila['fecha']) ? htmlspecialchars($fila['fecha']) : 'N/A' ;echo " ",isset($fila['hora']) ? htmlspecialchars($fila['hora']) : 'N/A'; ?></td>
+                        <td><?= htmlspecialchars(isset($fila['id_cita']) ? $fila['id_cita'] : 'N/A') ?></td>
+                        <td><?= htmlspecialchars(isset($fila['nombre_mascota']) ? $fila['nombre_mascota'] : 'N/A') ?></td>
+                        <td><?= htmlspecialchars(isset($fila['tipo_mascota']) ? $fila['tipo_mascota'] : 'N/A') ?></td>
+                        <td><?= htmlspecialchars(isset($fila['raza']) ? $fila['raza'] : 'N/A') ?></td>
+                        <td><?= htmlspecialchars(isset($fila['peso']) ? $fila['peso'] : 'N/A') ?></td>
+                        <td><?= htmlspecialchars(isset($fila['edad']) ? $fila['edad'] : 'N/A') ?></td>
+                        <td><?= htmlspecialchars(isset($fila['fecha']) ? $fila['fecha'] : 'N/A') . ' ' . htmlspecialchars(isset($fila['hora']) ? $fila['hora'] : 'N/A') ?></td>
                         <td>
-                            <!-- Botón de Eliminar -->
-                            <form action="" method="post" style="display: inline; margin-left: 5px;">
+                            <form action="" method="post" style="display: inline;">
                                 <input type="hidden" name="userId" value="<?= htmlspecialchars($fila['id_user']) ?>">
                                 <input type="hidden" name="action" value="delete">
                                 <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
@@ -125,22 +123,42 @@ if (!$_GET){
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="8">No se encontraron registros.</td>
+                    <td colspan="8" class="text-center">No se encontraron registros.</td>
                 </tr>
             <?php endif; ?>
             </tbody>
         </table>
     </div>
-    <?php endforeach; ?>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item <?php echo $_GET['pagina'] <= 1 ? 'disabled' : '' ?>"><a class="page-link" href="appointment_date.php?pagina=<?php echo $_GET['pagina']-1 ?>"> < </a></li>
-                <?php for ($i = 0; $i < $paginas; $i++): ?>
-                <li class="page-item"><a class="page-link <?php echo $_GET['pagina'] == $i+1 ? 'active' : ''?>" href="appointment_date.php?pagina=<?php echo $i + 1; ?>"><?php echo $i + 1; ?></a></li>
-                <?php endfor ?>
-                <li class="page-item <?php echo $_GET['pagina'] >= $paginas ? 'disabled' : '' ?>"><a class="page-link" href="appointment_date.php?pagina=<?php echo $_GET['pagina']+1?> "> > </a></li>
-            </ul>
-        </nav>
+
+    <!-- Pagination -->
+    <nav aria-label="Paginación de mascotas">
+        <ul class="pagination justify-content-center">
+            <!-- Previous Page -->
+            <li class="page-item <?= $currentPage <= 1 ? 'disabled' : '' ?>">
+                <a class="page-link" href="?page=<?= max(1, $currentPage - 1) ?>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <!-- Page Numbers -->
+            <?php
+            $startPage = max(1, $currentPage - 2);
+            $endPage = min($totalPages, $currentPage + 2);
+
+            for ($i = $startPage; $i <= $endPage; $i++): ?>
+                <li class="page-item <?= $i == $currentPage ? 'active' : '' ?>">
+                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                </li>
+            <?php endfor; ?>
+
+            <!-- Next Page -->
+            <li class="page-item <?= $currentPage >= $totalPages ? 'disabled' : '' ?>">
+                <a class="page-link" href="?page=<?= min($totalPages, $currentPage + 1) ?>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

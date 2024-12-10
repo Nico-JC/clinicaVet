@@ -82,6 +82,10 @@ class UserController
         return $this->user->getAllCitas();
     }
 
+    public function getPaginatedCitas($offset, $limit) {
+        return $this->user->getPaginatedCitas($offset, $limit);
+    }
+
 
     public function showPetsHistory($userId) {
         $mascotas = $this->user->getPetsByUserId($userId);

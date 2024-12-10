@@ -165,14 +165,22 @@ class User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getPaginatedCitas($offset, $limit, $filter = null, $button = null) {
+        $query = "SELECT * FROM cita WHERE 1=1 
+                  " . ($filter ? " AND column_name = '$filter'" : "") . "
+                  " . ($button ? " AND button_condition = '$button'" : "") . "
+                  LIMIT $offset, $limit";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function petsFilter(){
-        // Inicializar las variables de sesión por si no existen
         $_SESSION['filter'] = isset($_SESSION['filter']) ? $_SESSION['filter'] : [
             'id' => false,
             'email' => false,
             'consulta' => false
         ];
-        // Inicializar las variables de filtrado por si no existen
         if (!isset($_SESSION['filterId'])) {
             $_SESSION['filterId'] = false;
         }
