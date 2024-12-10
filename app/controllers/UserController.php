@@ -70,13 +70,13 @@ class UserController
         if ($button !== null) {
             switch ($button) {
                 case 'delete':
-                    if (isset($_POST['userId'])) {
-                        return $this->user->butonAction('delete', $_POST['emailID'], $_POST['currentRole']);
+                    if (isset($_POST['citaId'])) {
+                        return $this->pet->butonAction('delete', $_POST['citaId']);
                     }
                     break;
                 case 'asignar':
                     if (isset($_POST['emailID']) && isset($_POST['currentRole'])) {
-                        return $this->user->butonAction('asignar', $_POST['emailID'], $_POST['currentRole']);
+                        return $this->pet->butonAction('asignar', $_POST['emailID'], $_POST['currentRole']);
                     }
                     break;
             }
@@ -87,8 +87,8 @@ class UserController
         return $this->pet->getAllCitas();
     }
 
-    public function getPaginatedCitas($offset, $limit) {
-        return $this->pet->getPaginatedCitas($offset, $limit);
+    public function getPaginatedCitas($offset, $limit, $filter, $order) {
+        return $this->pet->getPaginatedCitas($offset, $limit, $filter, $order);
     }
 
 

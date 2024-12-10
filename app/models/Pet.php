@@ -22,15 +22,46 @@ class Pet{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getPaginatedCitas($offset, $limit, $filter = null, $button = null) {
-        $query = "SELECT * FROM cita WHERE 1=1 
-                  " . ($filter ? " AND column_name = '$filter'" : "") . "
-                  " . ($button ? " AND button_condition = '$button'" : "") . "
-                  LIMIT $offset, $limit";
+    public function getPaginatedCitas($offset, $limit, $filter = null, $order = "ASC") {
+        // preparo un listado con el nombre que puedo recibir y su tabla de referencia
+        $filterMap = [
+            'id' => 'id_cita',
+            'nombre' => 'nombre_mascota',
+            'fecha' => 'fecha'
+            // para agregar otro filtro coloca primero una coma despues de 'fecha' asi => 'fecha',
+            // despues pone:
+            // 'parametro que recibo' => 'tabla de mi DB'
+            /*
+             y en el html andate al header tr de la columba y agrega:
+
+            onclick="window.location.href='appointment_date.php?filter=XXXXX&order=<?= ($filter == 'nombre' && $order == 'ASC') ? 'DESC' : 'ASC' ?>'">
+
+            en XXXXX coloca el nombre que se va a enviar a este codigo como te dije arriba
+              */
+        ];
+
+        // busco el nombre que recibo y tomo su tabla correspondiente o anulo el filtro
+        if (isset($filterMap[$filter])) {
+            $filter = $filterMap[$filter];
+        } else {
+            $filter = null;
+        }
+
+        $query = "SELECT * FROM cita" .
+            ($filter ? " ORDER BY $filter $order" : "") .
+            " LIMIT :offset, :limit";
+
         $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+
         $stmt->execute();
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+
 
     public function petsFilter(){
         $_SESSION['filter'] = isset($_SESSION['filter']) ? $_SESSION['filter'] : [
@@ -97,6 +128,33 @@ class Pet{
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function butonAction($action, $citaId, $currentRole = null){
+        //DELETE
+        if ($action == 'delete'){
+            $deleteCita = "DELETE FROM cita WHERE id_cita = :id_cita";
+            $stmt = $this->conn->prepare($deleteCita);
+            $stmt->bindParam(':id_cita', $citaId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $this->getAllCitas();
+        }
+
+        // CHANGE ROL
+        elseif ($action == 'actualizar'){
+            // Alternar entre 1 (Admin) y 0 (Usuario)
+            $cambiarRol = ($currentRole == '1') ? '0' : '1';
+
+            $consultaUpdate = "UPDATE user SET accessLevel = :cambiarRol WHERE id_user = :userId";
+            $stmt = $this->conn->prepare($consultaUpdate);
+            $stmt->bindParam(':cambiarRol', $cambiarRol, PDO::PARAM_INT);
+            $stmt->bindParam(':userId', $citaId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $this->getAllCitas();
+        }
+        return $this->getAllCitas();
     }
 
 }

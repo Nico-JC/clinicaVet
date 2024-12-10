@@ -5,8 +5,8 @@ session_start();
 
 $userController = new UserController();
 $filter = isset($_GET['filter']) ? $_GET['filter'] : null;
+$order = isset($_GET['order']) ? $_GET['order'] : null;
 $button = isset($_POST['action']) ? $_POST['action'] : null;
-$mascotas = $userController->getAllCitas($filter, $button);
 
 
 // Paginación
@@ -15,7 +15,7 @@ $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $totalRecords = count($userController->getAllCitas($filter, $button));
 $totalPages = ceil($totalRecords / $itemsPerPage);
 $offset = ($currentPage - 1) * $itemsPerPage;
-$mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, $button);
+$mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, $order);
 ?>
 <!DOCTYPE html>
 <html>
@@ -48,7 +48,7 @@ $mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, 
                 <li class="nav-item">
                     <a class="nav-link" href="../../../public/layout/galery.php">Galería</a>
                 </li>
-                <?php if (isset($_SESSION["accessLevel"]) && $_SESSION["accessLevel"] == 2): ?>
+                <?php if (isset($_SESSION["id_permisos"]) && $_SESSION["id_permisos"] == 3): ?>
                     <li class="nav-item">
                     <a class="nav-link" href="../../../public/layout/contact.php">Contacto</a>
                 </li>
@@ -64,14 +64,16 @@ $mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, 
                         <a class="nav-link" href="../user/logIn.php">Iniciar Sesión</a>
                     </li>
                 <?php endif; ?>
-                <?php if (isset($_SESSION["accessLevel"]) && $_SESSION["accessLevel"] == 1): ?>
+                <?php if (isset($_SESSION["id_permisos"]) && $_SESSION["id_permisos"] == 1): ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Tools
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="adminDropdown">
                             <li><a class="dropdown-item" href="dashboard.php">Dashboard</a></li>
                             <li><a class="dropdown-item" href="user_management.php">Gestión de Usuarios</a></li>
+                            <?php if ($_SESSION["id_permisos"] != 1): ?>
                             <li><a class="dropdown-item active" href="appointment_date.php">Registro de Citas</a></li>
+                            <?php endif; ?>
                         </ul>
                     </li>
                 <?php endif; ?>
@@ -88,18 +90,33 @@ $mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, 
 <div class="container mt-5">
     <h1 class="mb-4">Registro de Mascotas</h1>
     <a href="/tp-clinica-vet/app/views/user/appointment.php" class="btn btn-success mb-3">Agregar Nueva Mascota</a>
+    <a href="/tp-clinica-vet/app/views/admin/appointment_date.php" class="btn btn-warning mb-3">Limpiar filtro</a>
     <div class="table-responsive">
         <table class="table table-striped ">
             <thead>
-            <tr> <!--window location, para recargar la pagina en el onclick para el filtrado (https://www.w3schools.com/js/js_window_location.asp)-->
-                <th><div style="cursor: pointer" onclick="window.location.href='appointment_date.php?filter=id'">ID</div>
-                <th><div style="cursor: pointer" onclick="window.location.href='appointment_date.php?filter=nombre'">Nombre</div></th>
-                <th>Tipo</th>
-                <th>Raza</th>
-                <th>Peso</th>
-                <th>Edad</th>
-                <th><div style="cursor: pointer" onclick="window.location.href='appointment_date.php?filter=fecha'">Fecha Y Hora del turno</div></th>
-            </tr>
+            <th>
+                <div style="cursor: pointer"
+                     onclick="window.location.href='appointment_date.php?filter=id&order=<?= ($filter == 'id' && $order == 'ASC') ? 'DESC' : 'ASC' ?>'">
+                    ID
+                </div>
+            </th>
+            <th>
+                <div style="cursor: pointer"
+                     onclick="window.location.href='appointment_date.php?filter=nombre&order=<?= ($filter == 'nombre' && $order == 'ASC') ? 'DESC' : 'ASC' ?>'">
+                    Nombre
+                </div>
+            </th>
+            <th>Tipo</th>
+            <th>Raza</th>
+            <th>Peso</th>
+            <th>Edad</th>
+            <th>
+                <div style="cursor: pointer"
+                     onclick="window.location.href='appointment_date.php?filter=fecha&order=<?= ($filter == 'fecha' && $order == 'ASC') ? 'DESC' : 'ASC' ?>'">
+                    Fecha Y Hora del turno
+                </div>
+            </th>
+
             </thead>
             <tbody>
             <?php if (!empty($mascotas)): ?>
@@ -114,7 +131,7 @@ $mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, 
                         <td><?= htmlspecialchars(isset($fila['fecha']) ? $fila['fecha'] : 'N/A') . ' ' . htmlspecialchars(isset($fila['hora']) ? $fila['hora'] : 'N/A') ?></td>
                         <td>
                             <form action="" method="post" style="display: inline;">
-                                <input type="hidden" name="userId" value="<?= htmlspecialchars($fila['id_user']) ?>">
+                                <input type="hidden" name="citaId" value="<?= htmlspecialchars($fila['id_cita']) ?>">
                                 <input type="hidden" name="action" value="delete">
                                 <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                             </form>

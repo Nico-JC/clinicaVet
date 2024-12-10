@@ -20,11 +20,12 @@ class User
         $email = htmlspecialchars(strip_tags($email));
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $query = "INSERT INTO user(password, email) VALUES (:password, :email)";
+        $query = "INSERT INTO user(password, email, id_permisos) VALUES (:password, :email, :id_permisos)";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':password', $hashedPassword, PDO::PARAM_STR);
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':id_permisos', 3, PDO::PARAM_INT);
         try {
             return $stmt->execute();
         } catch(PDOException $exception) {
@@ -41,7 +42,7 @@ class User
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION["email"] = $user["email"];
             $_SESSION["userId"] = $user["id_user"];
-            $_SESSION["accessLevel"] = $user["accessLevel"];
+            $_SESSION["id_permisos"] = $user["id_permisos"];
             return true;
         }
         return false;

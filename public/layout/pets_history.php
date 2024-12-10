@@ -67,7 +67,7 @@ $petsHistoryInfo = $userController->showPetsHistory($_SESSION["userId"]);
                     </li>
                 <?php endif; ?>
 
-                <?php if (isset($_SESSION["accessLevel"]) && $_SESSION["accessLevel"] == 1): ?>
+                <?php if (isset($_SESSION["id_permisos"]) && $_SESSION["id_permisos"] == 1): ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Tools
@@ -75,7 +75,9 @@ $petsHistoryInfo = $userController->showPetsHistory($_SESSION["userId"]);
                         <ul class="dropdown-menu" aria-labelledby="adminDropdown">
                             <li><a class="dropdown-item" href="../../app/views/admin/dashboard.php">Dashboard</a></li>
                             <li><a class="dropdown-item" href="../../app/views/admin/user_management.php">Gestión de Usuarios</a></li>
+                            <?php if ($_SESSION["id_permisos"] != 1): ?>
                             <li><a class="dropdown-item" href="../../app/views/admin/appointment_date.php">Registro de Citas</a></li>
+                            <?php endif; ?>
                         </ul>
                     </li>
                 <?php endif; ?>
