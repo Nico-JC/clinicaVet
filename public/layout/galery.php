@@ -112,32 +112,32 @@ session_start()
             <div class="row g-4">
                 <div class="col-12 col-sm-6 col-lg-4">
                     <div class="gallery-item">
-                        <img src="../../public/assets/images/hamster.jpg" alt="Imagen 1" class="gallery-img">
+                        <img src="../../public/assets/images/perro1.jpg" alt="Imagen 1" class="gallery-img">
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-4">
                     <div class="gallery-item">
-                        <img src="../../public/assets/images/carpincho.jpg" alt="Imagen 2" class="gallery-img">
+                        <img src="../../public/assets/images/perro2.jpg" alt="Imagen 2" class="gallery-img">
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-4">
                     <div class="gallery-item">
-                        <img src="../../public/assets/images/perroP.jpg" alt="Imagen 3" class="gallery-img">
+                        <img src="../../public/assets/images/perro3.jpg" alt="Imagen 3" class="gallery-img">
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-4">
                     <div class="gallery-item">
-                        <img src="../../public/assets/images/galgo-fresh.jpg" alt="Imagen 4" class="gallery-img">
+                        <img src="../../public/assets/images/perro4.jpg" alt="Imagen 4" class="gallery-img">
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-4">
                     <div class="gallery-item">
-                        <img src="../../public/assets/images/gato.jpg" alt="Imagen 5" class="gallery-img">
+                        <img src="../../public/assets/images/perro5.jpg" alt="Imagen 5" class="gallery-img">
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-4">
                     <div class="gallery-item">
-                        <img src="../../public/assets/images/husky.jpg" alt="Imagen 6" class="gallery-img">
+                        <img src="../../public/assets/images/perro6.jpg" alt="Imagen 6" class="gallery-img">
                     </div>
                 </div>
             </div>
