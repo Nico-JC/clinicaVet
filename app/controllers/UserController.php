@@ -46,7 +46,7 @@ class UserController
         exit();
     }
 
-    public function getAllUsers($filter = null, $button = null){
+    public function getAllUsers( $button = null){
         if ($button !== null) {
             switch ($button) {
                 case 'delete':
@@ -60,9 +60,6 @@ class UserController
                     }
                     break;
             }
-        }
-        if ($filter !== null) {
-            return $this->user->filter();
         }
         return $this->user->getAllUsers();
     }

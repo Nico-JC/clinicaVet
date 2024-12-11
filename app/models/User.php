@@ -96,65 +96,6 @@ class User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function filter(){
-        $_SESSION['filter'] = isset($_SESSION['filter']) ? $_SESSION['filter'] : [
-            'id' => false,
-            'email' => false,
-            'rol' => false
-        ];
-        if (!isset($_SESSION['filterId'])) {
-            $_SESSION['filterId'] = false;
-        }
-        if (!isset($_SESSION['filterEmail'])) {
-            $_SESSION['filterNom'] = false;
-        }
-        if (!isset($_SESSION['filterRol'])) {
-            $_SESSION['filterRol'] = false;
-        }
-        $sql = "SELECT
-        user.id_user,
-        user.email,
-        user.id_permisos
-        FROM user 
-        GROUP BY user.id_user, user.email, user.id_permisos";
-
-        if (isset($_GET['filter'])) {
-            switch ($_GET['filter']) {
-                case 'id':
-                    if(!$_SESSION['filterId']){
-                        $sql.= " ORDER BY user.id_user DESC";
-                        $_SESSION['filterId'] = true;
-                    }else{
-                        $sql.= " ORDER BY user.id_user ASC";
-                        $_SESSION['filterId'] = false;
-                    }
-                    break;
-                case 'email':
-                    if(!$_SESSION['filterEmail']){
-                        $sql.= " ORDER BY user.email DESC";
-                        $_SESSION['filterEmail'] = true;
-                    }else{
-                        $sql.= " ORDER BY user.email ASC";
-                        $_SESSION['filterEmail'] = false;
-                    }
-                    break;
-                case 'rol':
-                    if(!$_SESSION['filterRol']){
-                        $sql.= " ORDER BY id_permisos DESC";
-                        $_SESSION['filterRol'] = true;
-                    }else{
-                        $sql.= " ORDER BY id_permisos ASC";
-                        $_SESSION['filterRol'] = false;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
 
     public function butonAction($action, $userId, $currentRole = null){
         //DELETE

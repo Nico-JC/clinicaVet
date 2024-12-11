@@ -10,7 +10,7 @@ $button = isset($_POST['action']) ? $_POST['action'] : null;
 
 $itemsPerPage = 10;
 $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-$totalRecords = count($userController->getAllUsers($filter, $button));
+$totalRecords = count($userController->getAllUsers($button));
 $totalPages = ceil($totalRecords / $itemsPerPage);
 $offset = ($currentPage - 1) * $itemsPerPage;
 $users = $userController->getPaginatedUsers($offset, $itemsPerPage, $filter, $order);
