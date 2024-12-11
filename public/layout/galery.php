@@ -34,10 +34,10 @@ session_start()
                     <li class="nav-item active">
                         <a class="nav-link active" href="galery.php">Galería</a>
                     </li>
-                    <?php if (isset($_SESSION["id_permisos"]) && $_SESSION["id_permisos"] == 3): ?>
-                        <li class="nav-item">
-                        <a class="nav-link" href="contact.php">Contacto</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../app/views/user/contact.php">Contacto</a>
                     </li>
+                    <?php if (isset($_SESSION["id_permisos"]) && $_SESSION["id_permisos"] == 3): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="pets_history.php">Historial</a>
                     </li>
@@ -159,7 +159,7 @@ session_start()
                         <ul class="list-unstyled">
                             <li><a href="">Servicios</a></li>
                             <li><a href="">Equipo</a></li>
-                            <li><a href="contact.php">Contacto</a></li>
+                            <li><a href="../../app/views/user/contact.php">Contacto</a></li>
                         </ul>
                     </div>
                     <div class="col-lg-2 col-sm-6">

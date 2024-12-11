@@ -38,4 +38,8 @@ class AppointmentController
             }
         }
     }
+
+    public function reply($citaId, $diagnostico, $tratamiento, $veterinario){
+        return $this->cita->reply($citaId, $diagnostico, $tratamiento, $veterinario);
+    }
 }

@@ -91,6 +91,9 @@ class UserController
         return $this->pet->getPaginatedCitas($offset, $limit, $filter, $order);
     }
 
+    public function registerConsult($nombre, $apellido, $email, $telefono, $consulta){
+       return $this->user->registerConsult($nombre, $apellido, $email, $telefono, $consulta);
+    }
 
     public function showPetsHistory($userId) {
         $mascotas = $this->user->getPetsByUserId($userId);

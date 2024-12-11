@@ -47,4 +47,29 @@ class Appointment {
             return false;
         }
     }
+
+    public function reply($citaId, $diagnostico, $tratamiento, $veterinario){
+        $citaId = htmlspecialchars(strip_tags($citaId));
+        $diagnostico = htmlspecialchars(strip_tags($diagnostico));
+        $tratamiento = htmlspecialchars(strip_tags($tratamiento));
+        $veterinario = htmlspecialchars(strip_tags($veterinario));
+
+        $query = "UPDATE cita 
+              SET diagnostico = :diagnostico, 
+                  tratamiento = :tratamiento, 
+                  veterinario = :veterinario 
+              WHERE id_cita = :citaId";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':diagnostico', $diagnostico);
+        $stmt->bindParam(':tratamiento', $tratamiento);
+        $stmt->bindParam(':veterinario', $veterinario);
+        $stmt->bindParam(':citaId', $citaId);
+        try {
+            return $stmt->execute();
+        } catch (PDOException $exception) {
+            return false;
+        }
+    }
 }

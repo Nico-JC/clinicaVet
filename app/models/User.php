@@ -63,30 +63,26 @@ class User
     }
 
     public function filter(){
-        // Inicializar las variables de sesión por si no existen
         $_SESSION['filter'] = isset($_SESSION['filter']) ? $_SESSION['filter'] : [
             'id' => false,
             'email' => false,
-            'consulta' => false
+            'rol' => false
         ];
-        // Inicializar las variables de filtrado por si no existen
         if (!isset($_SESSION['filterId'])) {
             $_SESSION['filterId'] = false;
         }
         if (!isset($_SESSION['filterEmail'])) {
             $_SESSION['filterNom'] = false;
         }
-        if (!isset($_SESSION['filterCon'])) {
-            $_SESSION['filterCon'] = false;
+        if (!isset($_SESSION['filterRol'])) {
+            $_SESSION['filterRol'] = false;
         }
         $sql = "SELECT
         user.id_user,
         user.email,
-        user.accessLevel,
-        user.consultCount,
-        COUNT(consult.id_consulta) AS consultas_count
-        FROM user LEFT JOIN consult ON user.id_user = consult.id_user
-        GROUP BY user.id_user,user.email, user.accessLevel";
+        user.id_permisos
+        FROM user 
+        GROUP BY user.id_user, user.email, user.id_permisos";
 
         if (isset($_GET['filter'])) {
             switch ($_GET['filter']) {
@@ -108,13 +104,13 @@ class User
                         $_SESSION['filterEmail'] = false;
                     }
                     break;
-                case 'consulta':
-                    if(!$_SESSION['filterCon']){
-                        $sql.= " ORDER BY consultCount DESC";
-                        $_SESSION['filterCon'] = true;
+                case 'rol':
+                    if(!$_SESSION['filterRol']){
+                        $sql.= " ORDER BY id_permisos DESC";
+                        $_SESSION['filterRol'] = true;
                     }else{
-                        $sql.= " ORDER BY consultCount ASC";
-                        $_SESSION['filterCon'] = false;
+                        $sql.= " ORDER BY id_permisos ASC";
+                        $_SESSION['filterRol'] = false;
                     }
                     break;
                 default:
@@ -146,7 +142,7 @@ class User
         // CHANGE ROL
         elseif ($action == 'asignar'){
             // Alternar entre 1 (Admin) y 0 (Usuario)
-            $cambiarRol = ($currentRole == '1') ? '3' : '1';
+            $cambiarRol = ($currentRole == '2') ? '3' : '2';
 
             $consultaUpdate = "UPDATE user SET id_permisos = :cambiarRol WHERE id_user = :userId";
             $stmt = $this->conn->prepare($consultaUpdate);
@@ -159,7 +155,25 @@ class User
         return $this->getAllUsers();
     }
 
+    public function registerConsult($nombre, $apellido, $email, $telefono, $consulta) {
+        $nombre = htmlspecialchars(strip_tags($nombre));
+        $apellido = htmlspecialchars(strip_tags($apellido));
+        $email = htmlspecialchars(strip_tags($email));
+        $telefono = htmlspecialchars(strip_tags($telefono));
+        $consulta = htmlspecialchars(strip_tags($consulta));
 
+        $query = "INSERT INTO consult (name, last_name, email, phone_number, text) VALUES (:name, :last_name, :email, :phone_number, :text)";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindValue(':name', $nombre, PDO::PARAM_STR);
+        $stmt->bindValue(':last_name', $apellido, PDO::PARAM_STR);
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':phone_number', $telefono, PDO::PARAM_STR);
+        $stmt->bindValue(':text', $consulta, PDO::PARAM_STR);
+
+        return $stmt->execute();
+    }
 
     public function getPetsByUserId($userId) {
         $query = "SELECT DISTINCT nombre_mascota, tipo_mascota, raza, edad 

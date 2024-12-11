@@ -35,10 +35,10 @@ session_start();
                 <li class="nav-item">
                     <a class="nav-link" href="public/layout/galery.php">Galería</a>
                 </li>
-                <?php if (isset($_SESSION["id_permisos"]) && $_SESSION["id_permisos"] == 3): ?> <!-- si es usuario -->
                 <li class="nav-item">
-                    <a class="nav-link" href="public/layout/contact.php">Contacto</a>
+                    <a class="nav-link" href="app/views/user/contact.php">Contacto</a>
                 </li>
+                <?php if (isset($_SESSION["id_permisos"]) && $_SESSION["id_permisos"] == 3): ?> <!-- si es usuario -->
                 <li class="nav-item">
                     <a class="nav-link" href="public/layout/pets_history.php">Historial</a>
                 </li>
@@ -223,7 +223,7 @@ session_start();
                     <ul class="list-unstyled">
                         <li><a href="">Servicios</a></li>
                         <li><a href="equipo.php">Equipo</a></li>
-                        <li><a href="public/layout/contact.php">Contacto</a></li>
+                        <li><a href="app/views/user/contact.php">Contacto</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-2 col-sm-6">

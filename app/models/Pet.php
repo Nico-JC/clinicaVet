@@ -28,19 +28,8 @@ class Pet{
             'id' => 'id_cita',
             'nombre' => 'nombre_mascota',
             'fecha' => 'fecha'
-            // para agregar otro filtro coloca primero una coma despues de 'fecha' asi => 'fecha',
-            // despues pone:
-            // 'parametro que recibo' => 'tabla de mi DB'
-            /*
-             y en el html andate al header tr de la columba y agrega:
-
-            onclick="window.location.href='appointment_date.php?filter=XXXXX&order=<?= ($filter == 'nombre' && $order == 'ASC') ? 'DESC' : 'ASC' ?>'">
-
-            en XXXXX coloca el nombre que se va a enviar a este codigo como te dije arriba
-              */
         ];
 
-        // busco el nombre que recibo y tomo su tabla correspondiente o anulo el filtro
         if (isset($filterMap[$filter])) {
             $filter = $filterMap[$filter];
         } else {

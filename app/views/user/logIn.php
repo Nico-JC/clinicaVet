@@ -33,10 +33,10 @@ session_start();
                 <li class="nav-item">
                     <a class="nav-link" href="../../../public/layout/galery.php">Galería</a>
                 </li>
-                <?php if (isset($_SESSION["id_permisos"]) && $_SESSION["id_permisos"] == 3): ?>
-                    <li class="nav-item">
-                    <a class="nav-link" href="../../../public/layout/contact.php">Contacto</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.php">Contacto</a>
                 </li>
+                <?php if (isset($_SESSION["id_permisos"]) && $_SESSION["id_permisos"] == 3): ?>
                 <li class="nav-item">
                     <a class="nav-link" href="../../../public/layout/pets_history.php">Historial</a>
                 </li>

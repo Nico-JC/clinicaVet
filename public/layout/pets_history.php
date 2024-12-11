@@ -53,7 +53,7 @@ $petsHistoryInfo = $userController->showPetsHistory($_SESSION["userId"]);
                     <a class="nav-link" href="galery.php">Galería</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="contact.php">Contacto</a>
+                    <a class="nav-link" href="../../app/views/user/contact.php">Contacto</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link active" href="pets_history.php">Historial</a>
@@ -226,7 +226,7 @@ $petsHistoryInfo = $userController->showPetsHistory($_SESSION["userId"]);
                     <ul class="list-unstyled">
                         <li><a href="">Servicios</a></li>
                         <li><a href="">Equipo</a></li>
-                        <li><a href="contact.php">Contacto</a></li>
+                        <li><a href="../../app/views/user/contact.php">Contacto</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-2 col-sm-6">
