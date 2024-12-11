@@ -24,6 +24,7 @@ $diagnostico = htmlspecialchars(trim($_POST['diagnostico']));
 $tratamiento = htmlspecialchars(trim($_POST['tratamiento']));
 $veterinario = htmlspecialchars(trim($_POST['veterinario']));
 
+// Validate citaId
 if ($citaId === false || $citaId === null) {
     die('Error: ID de cita inválido');
 }

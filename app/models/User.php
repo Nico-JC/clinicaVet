@@ -62,6 +62,40 @@ class User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getPaginatedUsers($offset, $limit, $filter = null, $order = "ASC") {
+        $filterMap = [
+            'id' => 'id_user',
+            'email' => 'email',
+            'rol' => 'id_permisos'
+        ];
+
+        if (isset($filterMap[$filter])) {
+            $filter = $filterMap[$filter];
+        } else {
+            $filter = null;
+        }
+
+        $query = "SELECT * FROM user" .
+            ($filter ? " ORDER BY $filter $order" : "") .
+            " LIMIT :offset, :limit";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function showConsult(){
+        $query = "SELECT * FROM consult";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function filter(){
         $_SESSION['filter'] = isset($_SESSION['filter']) ? $_SESSION['filter'] : [
             'id' => false,
@@ -125,12 +159,6 @@ class User
     public function butonAction($action, $userId, $currentRole = null){
         //DELETE
         if ($action == 'delete'){
-            // Primero borramos las consultas que hizo el usuario de la tabla consulta
-            $deleteConsulta = "DELETE FROM consult WHERE id_user = :userId";
-            $stmt = $this->conn->prepare($deleteConsulta);
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
-            $stmt->execute();
-            // Despues borramos al usuario de la tabla user
             $deleteUser = "DELETE FROM user WHERE id_user = :userId";
             $stmt = $this->conn->prepare($deleteUser);
             $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
@@ -198,6 +226,32 @@ class User
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getPaginatedConsult($offset, $limit) {
+
+        $query = "SELECT * FROM consult LIMIT :offset, :limit";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function deleteConsult($action, $consultaId){
+        if ($action == 'delete'){
+            $deleteConsult = "DELETE FROM consult WHERE id_consulta = :id_consulta";
+            $stmt = $this->conn->prepare($deleteConsult);
+            $stmt->bindParam(':id_consulta', $consultaId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $this->showConsult();
+        }
+        return false;
     }
 
 }

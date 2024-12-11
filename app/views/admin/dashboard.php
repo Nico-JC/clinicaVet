@@ -4,21 +4,19 @@ require_once __DIR__ . '/../../controllers/UserController.php';
 session_start();
 
 $userController = new UserController();
-$filter = isset($_GET['filter']) ? $_GET['filter'] : null;
-$order = isset($_GET['order']) ? $_GET['order'] : null;
 $button = isset($_POST['action']) ? $_POST['action'] : null;
 
-//modal
+//Modal
 $success = isset($_GET['success']) ? $_GET['success'] : null;
 $error = isset($_GET['error']) ? $_GET['error'] : null;
 
 // Paginación
 $itemsPerPage = 10;
 $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-$totalRecords = count($userController->getAllCitas($filter, $button));
+$totalRecords = count($userController->showConsult($button));
 $totalPages = ceil($totalRecords / $itemsPerPage);
 $offset = ($currentPage - 1) * $itemsPerPage;
-$mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, $order);
+$consultas = $userController->getPaginatedConsult($offset, $itemsPerPage);
 
 ?>
 <!DOCTYPE html>
@@ -72,7 +70,7 @@ $mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, 
                         <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Tools
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="adminDropdown">
-                            <li><a class="dropdown-item active" href="dashboard.php">Consultas</a></li>
+                            <li><a class="dropdown-item active" href="dashboard.php">Dashboard</a></li>
                             <li><a class="dropdown-item" href="user_management.php">Gestión de Usuarios</a></li>
                             <li><a class="dropdown-item" href="appointment_date.php">Registro de Citas</a></li>
                         </ul>
@@ -102,70 +100,29 @@ $mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, 
             <ul class="list-group">
                 <div class="container mt-5">
                     <h3 class="mb-4">Consultas</h3>
-                    <a href="/tp-clinica-vet/app/views/user/appointment.php" class="btn btn-success mb-3">Agregar Nueva Mascota</a>
-                    <a href="/tp-clinica-vet/app/views/admin/appointment_date.php" class="btn btn-warning mb-3">Limpiar filtro</a>
                     <div class="table-responsive">
                         <table class="table table-striped ">
                             <thead>
-                            <th>
-                                <div style="cursor: pointer"
-                                     onclick="window.location.href='appointment_date.php?filter=id&order=<?= ($filter == 'id' && $order == 'ASC') ? 'DESC' : 'ASC' ?>'">
-                                    ID
-                                </div>
-                            </th>
-                            <th>
-                                <div style="cursor: pointer"
-                                     onclick="window.location.href='appointment_date.php?filter=nombre&order=<?= ($filter == 'nombre' && $order == 'ASC') ? 'DESC' : 'ASC' ?>'">
-                                    Nombre
-                                </div>
-                            </th>
-                            <th>Tipo</th>
-                            <th>Raza</th>
-                            <th>Peso</th>
-                            <th>Edad</th>
-                            <th>
-                                <div style="cursor: pointer"
-                                     onclick="window.location.href='appointment_date.php?filter=fecha&order=<?= ($filter == 'fecha' && $order == 'ASC') ? 'DESC' : 'ASC' ?>'">
-                                    Fecha Y Hora del turno
-                                </div>
-                            </th>
-                            <th>Acciones</th>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Telefono</th>
+                            <th>Consulta</th>
                             </thead>
                             <tbody>
-                            <?php if (!empty($mascotas)): ?>
-                                <?php foreach ($mascotas as $fila): ?>
+                            <?php if (!empty($consultas)): ?>
+                                <?php foreach ($consultas as $fila): ?>
                                     <tr>
-                                        <td><?= htmlspecialchars(isset($fila['id_cita']) ? $fila['id_cita'] : 'N/A') ?></td>
-                                        <td><?= htmlspecialchars(isset($fila['nombre_mascota']) ? $fila['nombre_mascota'] : 'N/A') ?></td>
-                                        <td><?= htmlspecialchars(isset($fila['tipo_mascota']) ? $fila['tipo_mascota'] : 'N/A') ?></td>
-                                        <td><?= htmlspecialchars(isset($fila['raza']) ? $fila['raza'] : 'N/A') ?></td>
-                                        <td><?= htmlspecialchars(isset($fila['peso']) ? $fila['peso'] : 'N/A') ?></td>
-                                        <td><?= htmlspecialchars(isset($fila['edad']) ? $fila['edad'] : 'N/A') ?></td>
-                                        <td><?= htmlspecialchars(isset($fila['fecha']) ? $fila['fecha'] : 'N/A') . ' ' . htmlspecialchars(isset($fila['hora']) ? $fila['hora'] : 'N/A') ?></td>
+                                        <td><?= htmlspecialchars(isset($fila['id_consulta']) ? $fila['id_consulta'] : 'N/A') ?></td>
+                                        <td><?= htmlspecialchars(isset($fila['email']) ? $fila['email'] : 'N/A') ?></td>
+                                        <td><?= htmlspecialchars(isset($fila['name']) ? $fila['name'] : 'N/A') ?></td>
+                                        <td><?= htmlspecialchars(isset($fila['last_name']) ? $fila['last_name'] : 'N/A') ?></td>
+                                        <td><?= htmlspecialchars(isset($fila['phone_number']) ? $fila['phone_number'] : 'N/A') ?></td>
+                                        <td><?= htmlspecialchars(isset($fila['text']) ? $fila['text'] : 'N/A') ?></td>
                                         <td>
-                                            <?php if ($fila['diagnostico'] != null || $fila['tratamiento'] != null || $fila['veterinario'] != null): ?>
-                                                <button type="button"
-                                                        class="btn btn-info btn-sm"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#viewFeedbackModal"
-                                                        data-diagnostico="<?= htmlspecialchars(isset($fila['diagnostico']) ? $fila['diagnostico'] : 'N/A') ?>"
-                                                        data-tratamiento="<?= htmlspecialchars(isset($fila['tratamiento']) ? $fila['tratamiento'] : 'N/A') ?>"
-                                                        data-veterinario="<?= htmlspecialchars(isset($fila['veterinario']) ? $fila['veterinario'] : 'N/A') ?>"
-                                                        data-mascota-nombre="<?= htmlspecialchars($fila['nombre_mascota']) ?>">
-                                                    Ver Feedback
-                                                </button>
-                                            <?php else: ?>
-                                                <button type="button"
-                                                        class="btn btn-primary btn-sm"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#feedbackModal"
-                                                        data-cita-id="<?= htmlspecialchars($fila['id_cita']) ?>"
-                                                        data-mascota-nombre="<?= htmlspecialchars($fila['nombre_mascota']) ?>">
-                                                    Feedback
-                                                </button>
-                                            <?php endif; ?>
                                             <form action="" method="post" style="display: inline;">
-                                                <input type="hidden" name="citaId" value="<?= htmlspecialchars($fila['id_cita']) ?>">
+                                                <input type="hidden" name="id_consulta" value="<?= htmlspecialchars($fila['id_consulta']) ?>">
                                                 <input type="hidden" name="action" value="delete">
                                                 <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                                             </form>
@@ -174,7 +131,7 @@ $mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, 
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
-                                    <td colspan="8" class="text-center">No se encontraron registros.</td>
+                                    <td colspan="8" class="text-center">No hay consultas.</td>
                                 </tr>
                             <?php endif; ?>
                             </tbody>

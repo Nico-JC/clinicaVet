@@ -208,14 +208,11 @@ $mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, 
     <!-- Pagination -->
     <nav aria-label="Paginación de mascotas">
         <ul class="pagination justify-content-center">
-            <!-- Previous Page -->
             <li class="page-item <?= $currentPage <= 1 ? 'disabled' : '' ?>">
                 <a class="page-link" href="?page=<?= max(1, $currentPage - 1) ?>" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-
-            <!-- Page Numbers -->
             <?php
             $startPage = max(1, $currentPage - 2);
             $endPage = min($totalPages, $currentPage + 2);
@@ -226,7 +223,6 @@ $mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, 
                 </li>
             <?php endfor; ?>
 
-            <!-- Next Page -->
             <li class="page-item <?= $currentPage >= $totalPages ? 'disabled' : '' ?>">
                 <a class="page-link" href="?page=<?= min($totalPages, $currentPage + 1) ?>" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>

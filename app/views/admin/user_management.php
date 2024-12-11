@@ -5,8 +5,15 @@ session_start();
 
 $userController = new UserController();
 $filter = isset($_GET['filter']) ? $_GET['filter'] : null;
+$order = isset($_GET['order']) ? $_GET['order'] : null;
 $button = isset($_POST['action']) ? $_POST['action'] : null;
-$users = $userController->getAllUsers($filter, $button);
+
+$itemsPerPage = 10;
+$currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$totalRecords = count($userController->getAllUsers($filter, $button));
+$totalPages = ceil($totalRecords / $itemsPerPage);
+$offset = ($currentPage - 1) * $itemsPerPage;
+$users = $userController->getPaginatedUsers($offset, $itemsPerPage, $filter, $order);
 ?>
 
 <!DOCTYPE html>
@@ -85,9 +92,24 @@ $users = $userController->getAllUsers($filter, $button);
         <table class="table table-striped ">
             <thead>
             <tr>
-                <th><div style="cursor: pointer" onclick="window.location.href='user_management.php?filter=id'">ID</div>
-                <th><div style="cursor: pointer" onclick="window.location.href='user_management.php?filter=email'">Email</div></th>
-                <th><div style="cursor: pointer" onclick="window.location.href='user_management.php?filter=rol'">Rol</div></th>
+                <th>
+                    <div style="cursor: pointer"
+                         onclick="window.location.href='user_management.php?filter=id&order=<?= ($filter == 'id' && $order == 'ASC') ? 'DESC' : 'ASC' ?>'">
+                        ID
+                    </div>
+                </th>
+                <th>
+                    <div style="cursor: pointer"
+                         onclick="window.location.href='user_management.php?filter=email&order=<?= ($filter == 'email' && $order == 'ASC') ? 'DESC' : 'ASC' ?>'">
+                        Email
+                    </div>
+                </th>
+                <th>
+                    <div style="cursor: pointer"
+                         onclick="window.location.href='user_management.php?filter=rol&order=<?= ($filter == 'rol' && $order == 'ASC') ? 'DESC' : 'ASC' ?>'">
+                        Rol
+                    </div>
+                </th>
                 <th>Acciones</th>
             </tr>
             </thead>
@@ -122,6 +144,29 @@ $users = $userController->getAllUsers($filter, $button);
             </tbody>
         </table>
     </div>
+    <!-- Pagination -->
+    <nav aria-label="Paginación de mascotas">
+        <ul class="pagination justify-content-center">
+            <li class="page-item <?= $currentPage <= 1 ? 'disabled' : '' ?>">
+                <a class="page-link" href="?page=<?= max(1, $currentPage - 1) ?>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <?php
+            $startPage = max(1, $currentPage - 2);
+            $endPage = min($totalPages, $currentPage + 2);
+            for ($i = $startPage; $i <= $endPage; $i++): ?>
+                <li class="page-item <?= $i == $currentPage ? 'active' : '' ?>">
+                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                </li>
+            <?php endfor; ?>
+            <li class="page-item <?= $currentPage >= $totalPages ? 'disabled' : '' ?>">
+                <a class="page-link" href="?page=<?= min($totalPages, $currentPage + 1) ?>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -23,7 +23,6 @@ class Pet{
     }
 
     public function getPaginatedCitas($offset, $limit, $filter = null, $order = "ASC") {
-        // preparo un listado con el nombre que puedo recibir y su tabla de referencia
         $filterMap = [
             'id' => 'id_cita',
             'nombre' => 'nombre_mascota',

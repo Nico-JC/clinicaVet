@@ -3,6 +3,7 @@
 namespace controllers;
 
 use http\Exception\BadConversionException;
+use http\Exception\BadUrlException;
 use models\User;
 use models\Pet;
 
@@ -66,6 +67,10 @@ class UserController
         return $this->user->getAllUsers();
     }
 
+    public function getPaginatedUsers($offset, $limit, $filter, $order) {
+        return $this->user->getPaginatedUsers($offset, $limit, $filter, $order);
+    }
+
     public function getAllCitas($filter = null, $button = null){
         if ($button !== null) {
             switch ($button) {
@@ -91,6 +96,7 @@ class UserController
         return $this->pet->getPaginatedCitas($offset, $limit, $filter, $order);
     }
 
+
     public function registerConsult($nombre, $apellido, $email, $telefono, $consulta){
        return $this->user->registerConsult($nombre, $apellido, $email, $telefono, $consulta);
     }
@@ -106,5 +112,18 @@ class UserController
 
     public function getPetMedicalHistory($userId, $nombreMascota) {
         return $this->user->getMedicalHistoryByPetName($userId, $nombreMascota);
+    }
+
+    public function showConsult($button = null){
+        if ($button !== null && $button == 'delete') {
+            if (isset($_POST['id_consulta'])) {
+                return $this->user->deleteConsult('delete', $_POST['id_consulta']);
+            }
+        }
+        return $this->user->showConsult();
+    }
+
+    public function getPaginatedConsult($offset, $limit) {
+        return $this->user->getPaginatedConsult($offset, $limit);
     }
 }
