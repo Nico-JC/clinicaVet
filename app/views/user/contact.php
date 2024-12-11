@@ -28,7 +28,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : null;
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
-                El feedback se ha guardado correctamente.
+                Consulta enviada correctamente.
             </div>
         </div>
     </div>
@@ -42,7 +42,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : null;
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
-                Hubo un problema al guardar el feedback. Por favor, intente nuevamente.
+                Hubo un problema al enviar la consulta. Por favor, intente nuevamente.
             </div>
         </div>
     </div>
