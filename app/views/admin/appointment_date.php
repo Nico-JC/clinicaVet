@@ -56,6 +56,11 @@ $mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, 
                     <a class="nav-link" href="../../../public/layout/pets_history.php">Historial</a>
                 </li>
                 <?php endif; ?>
+                <?php if (isset($_SESSION["id_permisos"]) && $_SESSION["id_permisos"] == 2): ?>
+                <li class="nav-item active">
+                    <a class="nav-link active" href="appointment_date.php">Registro de Citas</a>
+                </li>
+                <?php endif; ?>
                 <?php if(!isset($_SESSION["userId"])): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="../user/register.php">Registrarse</a>
@@ -71,9 +76,7 @@ $mascotas = $userController->getPaginatedCitas($offset, $itemsPerPage, $filter, 
                         <ul class="dropdown-menu" aria-labelledby="adminDropdown">
                             <li><a class="dropdown-item" href="dashboard.php">Dashboard</a></li>
                             <li><a class="dropdown-item" href="user_management.php">Gestión de Usuarios</a></li>
-                            <?php if ($_SESSION["id_permisos"] != 1): ?>
-                            <li><a class="dropdown-item active" href="appointment_date.php">Registro de Citas</a></li>
-                            <?php endif; ?>
+                            <li><a class="dropdown-item" href="appointment_date.php">Registro de Citas</a></li>
                         </ul>
                     </li>
                 <?php endif; ?>

@@ -146,9 +146,9 @@ class User
         // CHANGE ROL
         elseif ($action == 'asignar'){
             // Alternar entre 1 (Admin) y 0 (Usuario)
-            $cambiarRol = ($currentRole == '1') ? '0' : '1';
+            $cambiarRol = ($currentRole == '1') ? '3' : '1';
 
-            $consultaUpdate = "UPDATE user SET accessLevel = :cambiarRol WHERE id_user = :userId";
+            $consultaUpdate = "UPDATE user SET id_permisos = :cambiarRol WHERE id_user = :userId";
             $stmt = $this->conn->prepare($consultaUpdate);
             $stmt->bindParam(':cambiarRol', $cambiarRol, PDO::PARAM_INT);
             $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);

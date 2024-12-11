@@ -62,9 +62,7 @@ $users = $userController->getAllUsers($filter, $button);
                         <ul class="dropdown-menu" aria-labelledby="adminDropdown">
                             <li><a class="dropdown-item" href="dashboard.php">Dashboard</a></li>
                             <li><a class="dropdown-item active" href="user_management.php">Gestión de Usuarios</a></li>
-                            <?php if ($_SESSION["id_permisos"] != 1): ?>
                             <li><a class="dropdown-item" href="appointment_date.php">Registro de Citas</a></li>
-                            <?php endif; ?>
                         </ul>
                     </li>
                 <?php endif; ?>
@@ -102,15 +100,15 @@ $users = $userController->getAllUsers($filter, $button);
                         <td><?= htmlspecialchars($fila['id_user']) ?></td>
                         <td><?= htmlspecialchars($fila['email']) ?></td>
                         <td><?= htmlspecialchars($fila['consultCount']) ?></td>
-                        <td><?= htmlspecialchars(($fila['accessLevel'] == 1 ? 'Administrador' : 'Usuario')) ?></td>
+                        <td><?= htmlspecialchars($fila['id_permisos'] == 1 ? 'Administrador' : ($fila['id_permisos'] == 2 ? 'Veterinario' : 'Usuario')) ?></td>
                         <td>
                             <!-- Botón de Asignar Rol -->
                             <form action="" method="post" style="display: inline; margin-left: 5px;">
                                 <input type="hidden" name="emailID" value="<?= htmlspecialchars($fila['id_user']) ?>">
-                                <input type="hidden" name="currentRole" value="<?= htmlspecialchars($fila['accessLevel']) ?>">
+                                <input type="hidden" name="currentRole" value="<?= htmlspecialchars($fila['id_permisos']) ?>">
                                 <input type="hidden" name="action" value="asignar">
-                                <?php $cambiarRol = ($fila['accessLevel'] == 1) ? 'Usuario' : 'Administrador'; ?>
-                                <button type="submit" class="btn btn-primary btn-sm">Asignar Rol</button>
+                                <?php $cambiarRol = ($fila['id_permisos'] == 1) ? 'Usuario' : 'Administrador'; ?>
+                                <button type="submit" class="btn btn-primary btn-sm">Cambiar Rol</button>
                             </form>
 
                             <!-- Botón de Eliminar -->

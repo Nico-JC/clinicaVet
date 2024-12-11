@@ -54,9 +54,7 @@ session_start()
                         <ul class="dropdown-menu" aria-labelledby="adminDropdown">
                             <li><a class="dropdown-item active" href="dashboard.php">Dashboard</a></li>
                             <li><a class="dropdown-item" href="user_management.php">Gestión de Usuarios</a></li>
-                            <?php if ($_SESSION["id_permisos"] != 1): ?>
                             <li><a class="dropdown-item" href="appointment_date.php">Registro de Citas</a></li>
-                            <?php endif; ?>
                         </ul>
                     </li>
                 <?php endif; ?>
